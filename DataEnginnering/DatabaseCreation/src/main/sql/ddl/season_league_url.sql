@@ -1,0 +1,7 @@
+CREATE TABLE football_data.season_leagues_url
+(
+    ID INTEGER NOT NULL,
+    URL VARCHAR(255) NOT NULL,
+    SEASON VARCHAR(10) NOT NULL,
+    LEAGUE VARCHAR(20) NOT NULL
+)

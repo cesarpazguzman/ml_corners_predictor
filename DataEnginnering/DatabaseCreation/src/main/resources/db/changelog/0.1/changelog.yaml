@@ -27,3 +27,10 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: src/main/sql/ddl/stats_matches.sql
+  - changeSet:
+      id: 5
+      author: Cesar
+      comment: "CREATE TABLE season_league_url"
+      changes:
+        - sqlFile:
+            path: src/main/sql/ddl/season_league_url.sql
