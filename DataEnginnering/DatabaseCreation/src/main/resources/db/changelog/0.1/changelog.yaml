@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Cesar
+      comment: "CREATE TABLE actove_matches"
+      changes:
+        - sqlFile:
+            path: src/main/sql/ddl/active_matches.sql
+  - changeSet:
+      id: 2
+      author: Cesar
+      comment: "CREATE TABLE finished_matches"
+      changes:
+        - sqlFile:
+            path: src/main/sql/ddl/finished_matches.sql
+  - changeSet:
+      id: 3
+      author: Cesar
+      comment: "CREATE TABLE matches"
+      changes:
+        - sqlFile:
+            path: src/main/sql/ddl/matches.sql
+  - changeSet:
+      id: 4
+      author: Cesar
+      comment: "CREATE TABLE stats_matches"
+      changes:
+        - sqlFile:
+            path: src/main/sql/ddl/stats_matches.sql

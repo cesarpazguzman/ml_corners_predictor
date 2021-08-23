@@ -3,3 +3,5 @@ DataEnginnering/DataCollection/core/__pycache__/
 DataEnginnering/DataCollection/betcore/__pycache__
 DataEnginnering/DataCollection/.idea/
 DataEnginnering/DataCollection/__pycache__/
+DataEnginnering/DatabaseCreation/.idea/
+*.iml
