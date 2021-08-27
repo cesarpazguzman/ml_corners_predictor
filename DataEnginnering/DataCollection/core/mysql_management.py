@@ -1,13 +1,18 @@
 from mysql.connector import connect, Error
+from sqlalchemy import create_engine
+import pandas as pd
+import pymysql
 
 class MySQLManager:
 
     __connection = None
+    __connection_pd = None
 
     def __init__(self):
 
         self.__connection = self.__get_connection()
-        if self.__connection is None:
+        self.__connection_pd = create_engine('mysql+pymysql://root:secret@localhost/football_data')
+        if self.__connection is None or self.__connection_pd is None:
             print("Connection database error")
 
     def __get_connection(self):
@@ -16,7 +21,7 @@ class MySQLManager:
                     host="localhost",
                     user="root",
                     password="secret",
-                    database="cornersSecond",
+                    database="football_data",
             )
             return connection
         except Error as e:
@@ -65,6 +70,13 @@ class MySQLManager:
         except Error as err:
             print("Something went wrong: {}".format(err))
             self.close_connection()
+
+    def select_table(self, table):
+        try:
+            return pd.read_sql('SELECT * FROM {0}'.format(table), con=self.__connection_pd)
+        except Exception as ex:
+            print("Something went wrong: {}".format(ex))
+            exit(-1)
 
     def close_connection(self):
         self.__connection.close()
