@@ -31,7 +31,7 @@ class MySQLManager:
     def execute_many(self, query, records):
         try:
             cursor = self.__connection.cursor()
-            cursor.execute_many(query, records)
+            cursor.executemany(query, records)
             self.__connection.commit()
         except Error as err:
             print("Something went wrong: {}".format(err))

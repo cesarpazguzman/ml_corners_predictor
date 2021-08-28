@@ -30,6 +30,6 @@ INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (2
 INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (27,"https://www.flashscore.es/futbol/alemania/bundesliga-2015-2016/resultados/","2015/2016","BUNDESLIGA");
 INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (28,"https://www.flashscore.es/futbol/alemania/bundesliga-2014-2015/resultados/","2014/2015","BUNDESLIGA");
 
-INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (29,"https://www.flashscore.es/futbol/francia/ligue-1-2020-2021/","2020/2021","LIGUE1");
-INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (30,"https://www.flashscore.es/futbol/francia/ligue-1-2019-2020/","2019/2020","LIGUE1");
-INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (31,"https://www.flashscore.es/futbol/francia/ligue-1-2018-2019/","2018/2019","LIGUE1");
+INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (29,"https://www.flashscore.es/futbol/francia/ligue-1-2020-2021/resultados/","2020/2021","LIGUE1");
+INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (30,"https://www.flashscore.es/futbol/francia/ligue-1-2019-2020/resultados/","2019/2020","LIGUE1");
+INSERT INTO football_data.season_leagues_url (ID, URL, SEASON, LEAGUE) VALUES (31,"https://www.flashscore.es/futbol/francia/ligue-1-2018-2019/resultados/","2018/2019","LIGUE1");

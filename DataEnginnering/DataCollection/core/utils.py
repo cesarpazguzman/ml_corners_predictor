@@ -1,8 +1,8 @@
 from selenium.webdriver.chrome.options import Options
 
 options = Options()
-#options.headless = True
-#options.add_argument('--blink-settings=imagesEnabled=false')
+options.headless = True
+options.add_argument('--blink-settings=imagesEnabled=false')
 
 def check_exists_by_xpath(driver, xpath):
     try:

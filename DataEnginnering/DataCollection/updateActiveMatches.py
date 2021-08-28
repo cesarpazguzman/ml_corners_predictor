@@ -34,6 +34,6 @@ def updateActiveMatches():
 
     print(len(urls), urls)
 
-    mysql_con.executeMany(stmt, urls)
+    mysql_con.execute_many(stmt, urls)
 
     driver.close()
