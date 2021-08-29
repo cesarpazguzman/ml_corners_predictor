@@ -144,12 +144,18 @@ class Scrapper:
 
     def insert_data_match(self, data, force_insert=False):
         id_match = data["id_match"]
-        self.stats_to_insert.append(self.insert_stats(id_match + "HT", data["stats_total"], "Home"))
-        self.stats_to_insert.append(self.insert_stats(id_match + "H1", data["stats_first_time"], "Home"))
-        self.stats_to_insert.append(self.insert_stats(id_match + "H2", data["stats_second_time"], "Home"))
-        self.stats_to_insert.append(self.insert_stats(id_match + "AT", data["stats_total"], "Away"))
-        self.stats_to_insert.append(self.insert_stats(id_match + "A1", data["stats_first_time"], "Away"))
-        self.stats_to_insert.append(self.insert_stats(id_match + "A2", data["stats_second_time"], "Away"))
+        ht = self.insert_stats(id_match + "HT", data["stats_total"], "Home")
+        h1 = self.insert_stats(id_match + "H1", data["stats_first_time"], "Home")
+        h2 = self.insert_stats(id_match + "H2", data["stats_second_time"], "Home")
+        at = self.insert_stats(id_match + "AT", data["stats_total"], "Away")
+        a1 = self.insert_stats(id_match + "A1", data["stats_first_time"], "Away")
+        a2 = self.insert_stats(id_match + "A2", data["stats_second_time"], "Away")
+        self.stats_to_insert.append(ht)
+        self.stats_to_insert.append(h1)
+        self.stats_to_insert.append(h2)
+        self.stats_to_insert.append(at)
+        self.stats_to_insert.append(a1)
+        self.stats_to_insert.append(a2)
 
         corners_min_h = ";".join([min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamH"]]["corners"]])
         corners_min_a = ";".join([min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamA"]]["corners"]])
