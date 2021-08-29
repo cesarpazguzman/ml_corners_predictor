@@ -18,8 +18,6 @@ def get_all_matches_url():
             urls = season_leagues_url[season_leagues_url["LEAGUE"] == league]["URL"].tolist()
             futures.append(executor.submit(sm.Scrapper().get_all_matches_url, urls, url_finished_present))
 
-
-
 def get_stats_matches():
     id_matches = mysql_con.select_table("finished_matches")["URL"].tolist()
     num_workers = 10

@@ -1,17 +1,17 @@
+import time
+
 from core.driver_manager import DriverManager
 from core import mysql_management
 from core import properties
 
 class Scrapper:
-    driverManager = None
-    mysql_con = None
-    current_batch_insert = 0
-    stats_to_insert = []
-    matches_to_insert = []
+
     def __init__(self):
         self.driverManager = DriverManager()
         self.mysql_con = mysql_management.MySQLManager()
-
+        self.stats_to_insert = []
+        self.matches_to_insert = []
+        self.current_batch_insert = 0
 
     def get_stats_match(self, id_matches):
         last = id_matches[-1]
@@ -33,7 +33,8 @@ class Scrapper:
                 data["goals_a"] = outcome.find_all("span")[2].get_text()
                 data["time"] = self.driverManager.find_elem(soup,"div", "startTime___2oy0czV", "time", 0).get_text().split(" ")[0]
                 data["round"] = self.driverManager.find_elem(soup,"span", "country___24Qe-aj", "round", 0).get_text().split("Jornada ")[1]
-                data["league"] = self.driverManager.find_elem(soup, "span", "country___24Qe-aj", "round", 0).get_text().split(" - ")[0]
+                data["league"] = self.driverManager.find_elem(soup, "span", "country___24Qe-aj", "round", 0).get_text().split(" - ")[0]\
+                    .split(":")[0]
 
                 data["teamH"] = self.driverManager.find_elem(soup, "div", "participantName___3lRDM1i overflow___cyQxKBr", "teamH", 0)\
                     .find("a").get_text()
@@ -51,7 +52,7 @@ class Scrapper:
 
                 data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
 
-                print(data)
+                print(self.current_batch_insert, data)
                 self.insert_data_match(data, last == id_match)
 
             except:
@@ -150,18 +151,19 @@ class Scrapper:
         self.stats_to_insert.append(self.insert_stats(id_match + "A1", data["stats_first_time"], "Away"))
         self.stats_to_insert.append(self.insert_stats(id_match + "A2", data["stats_second_time"], "Away"))
 
-        corners_min_h = ";".join(data["comments"][data["teamH"]]["corners"])
-        corners_min_a = ";".join(data["comments"][data["teamA"]]["corners"])
-        goals_min_h = ";".join(data["comments"][data["teamH"]]["gol"])
-        goals_min_a = ";".join(data["comments"][data["teamA"]]["gol"])
-        self.matches_to_insert.append((id_match, "_null_", data["league"], data["round"], data["teamH"], data["teamA"], data["time"],
-                                       data["odds_h"], data["odds_hx"], data["odds_a"], data["odds_ax"],
+        corners_min_h = ";".join([min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamH"]]["corners"]])
+        corners_min_a = ";".join([min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamA"]]["corners"]])
+        goals_min_h = ";".join([min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamH"]]["gol"]])
+        goals_min_a = ";".join([min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamA"]]["gol"]])
+        self.matches_to_insert.append((id_match, data["league"], data["round"], data["teamH"], data["teamA"], data["time"],
+                                       data["goals_h"], data["goals_a"], data["odds_h"], data["odds_hx"], data["odds_a"], data["odds_ax"],
                                        id_match+"HT", id_match+"H1", id_match+"H2", id_match+"AT", id_match+"A1",
                                        id_match+"A2", corners_min_h, corners_min_a, goals_min_h, goals_min_a))
         self.current_batch_insert += 1
 
         if self.current_batch_insert == properties.batch_size_inserts or force_insert:
             self.mysql_con.execute_many(properties.stmt_stats, self.stats_to_insert)
+            time.sleep(2)
             self.mysql_con.execute_many(properties.stmt_match, self.matches_to_insert)
             self.current_batch_insert = 0
             self.stats_to_insert = []
@@ -223,6 +225,3 @@ class Scrapper:
         self.mysql_con.execute_many(properties.stmt_finished_matches, urls_to_insert)
 
         driverManager.quit()
-
-
-
