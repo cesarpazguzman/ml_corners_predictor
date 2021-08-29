@@ -8,18 +8,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from core import properties
+
 class DriverManager:
 
     driver = None
     c = None
     soup = None
 
-    def __init__(self, adult_accept=True):
+    def __init__(self, adult_accept=True, headless=True):
         options = Options()
-        #options.headless = True
+        options.headless = headless
         options.add_argument('--blink-settings=imagesEnabled=false')
         options.add_argument("--disable-popup-blocking")
-        self.driver = webdriver.Chrome("C:/Users/Cesar/Documents/Apuestas/chromedriver.exe", options=options)
+        self.driver = webdriver.Chrome(properties.path_exec_chrome, options=options)
 
         if adult_accept: self.version_18()
 
@@ -72,3 +74,13 @@ class DriverManager:
         except:
             return True
 
+    def scroll_down(self):
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(0.5)
+
+    def find_elem(self, driver, tag_name, class_name, feature_name, index=-1):
+        try:
+            elem = driver.find_all(tag_name, {"class": class_name})
+            return elem if index == -1 else elem[index]
+        except:
+            print("Error scrapping the feature {0}".format(feature_name))

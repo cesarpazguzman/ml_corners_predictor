@@ -1,7 +1,7 @@
 from mysql.connector import connect, Error
 from sqlalchemy import create_engine
 import pandas as pd
-import pymysql
+from core import properties
 
 class MySQLManager:
 
@@ -11,17 +11,17 @@ class MySQLManager:
     def __init__(self):
 
         self.__connection = self.__get_connection()
-        self.__connection_pd = create_engine('mysql+pymysql://root:secret@localhost/football_data')
+        self.__connection_pd = create_engine(properties.pymsqyl_url)
         if self.__connection is None or self.__connection_pd is None:
             print("Connection database error")
 
     def __get_connection(self):
         try:
             connection = connect(
-                    host="localhost",
-                    user="root",
-                    password="secret",
-                    database="football_data",
+                    host=properties.mysql_host,
+                    user=properties.mysql_user,
+                    password=properties.mysql_password,
+                    database=properties.mysql_database,
             )
             return connection
         except Error as e:

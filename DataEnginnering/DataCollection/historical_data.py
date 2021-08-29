@@ -1,16 +1,8 @@
-import time
-from bs4 import BeautifulSoup
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium import webdriver
-from core import utils, mysql_management
-from pandas import DataFrame
+from core import mysql_management
 import concurrent.futures
-from core.driver_manager import DriverManager
-from selenium.webdriver.support import expected_conditions as EC
+from core import scrapper_matches as sm
 
-path_exec_chrome = "C:/Users/Cesar/Documents/Apuestas/chromedriver.exe"
 mysql_con = mysql_management.MySQLManager()
-stmt_urls = "INSERT INTO football_data.finished_matches (id, url) VALUES (%s, %s)"
 
 def get_all_matches_url():
 
@@ -24,39 +16,20 @@ def get_all_matches_url():
         futures = []
         for league in leagues:
             urls = season_leagues_url[season_leagues_url["LEAGUE"] == league]["URL"].tolist()
-            futures.append(executor.submit(_get_all_matches_url, urls, url_finished_present))
+            futures.append(executor.submit(sm.Scrapper().get_all_matches_url, urls, url_finished_present))
 
-def _get_all_matches_url(urls_league, url_finished_present):
-    driverManager = DriverManager(adult_accept=False)
-    urls_to_insert = []
-    for url in urls_league:
-        driverManager.get(url)
-        driverManager.click_button_by_id("onetrust-accept-btn-handler")
-        driverManager.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(0.5)
-        while True:
-            if not driverManager.check_exists_by_xpath(driverManager.driver, './/*[@id="live-table"]/div[1]/div/div/a'):
-                break
-            if not driverManager.click_path(driverManager.driver, './/*[@id="live-table"]/div[1]/div/div/a'):
-                break
-            driverManager.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(0.5)
 
-        count=0
-        for match in driverManager.driver.find_elements_by_xpath(
-                './/div[starts-with(@class,"event__match event__match--static")]'):
 
-            # Si ocurrio un evento en el partido, suspendido o por perdido, pasamos de el
-            if driverManager.check_exists_by_xpath(match, './/div[starts-with(@class,"event__stage")]'): continue
+def get_stats_matches():
+    id_matches = mysql_con.select_table("finished_matches")["URL"].tolist()
+    num_workers = 10
+    splitted_matches = list(split(id_matches, num_workers))
 
-            id_match = match.get_attribute('id').replace("g_1_", "")
-            count += 1
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
+        futures = []
+        for url_matches in splitted_matches:
+            futures.append(executor.submit(sm.Scrapper().get_stats_match, url_matches))
 
-            if id_match not in url_finished_present:
-                print(count, id_match)
-                urls_to_insert.append((count, id_match))
-
-    mysql_con.execute_many(stmt_urls, urls_to_insert)
-
-    driverManager.quit()
-
+def split(a, n):
+    k, m = divmod(len(a), n)
+    return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
