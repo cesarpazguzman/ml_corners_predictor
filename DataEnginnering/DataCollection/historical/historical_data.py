@@ -1,6 +1,7 @@
 from core import mysql_management
 import concurrent.futures
 from core import scrapper_matches as sm
+from core import utils
 
 mysql_con = mysql_management.MySQLManager()
 
@@ -23,14 +24,9 @@ def get_all_matches_url():
 def get_stats_matches():
     id_matches = mysql_con.select_table("finished_matches")["URL"].tolist()
     num_workers = 10
-    splitted_matches = list(split(id_matches, num_workers))
+    splitted_matches = list(utils.split(id_matches, num_workers))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
         futures = []
         for url_matches in splitted_matches:
             futures.append(executor.submit(sm.Scrapper().get_stats_match, url_matches))
-
-
-def split(a, n):
-    k, m = divmod(len(a), n)
-    return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))

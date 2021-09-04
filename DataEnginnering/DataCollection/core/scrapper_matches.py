@@ -1,8 +1,9 @@
 import time
 
 from core.driver_manager import DriverManager
-from core import mysql_management
-from core import properties
+from core import mysql_management, utils
+from properties import properties, queries
+
 
 class Scrapper:
 
@@ -53,7 +54,7 @@ class Scrapper:
                 data["comments"]: dict = self.get_comments(id_match, data["teamH"], data["teamA"])
 
                 print(self.current_batch_insert, data)
-                self.insert_data_match(data, last == id_match)
+                #self.insert_data_match(data, last == id_match)
 
             except:
                 print("Error unknown scrapping {0}".format(id_match))
@@ -185,9 +186,9 @@ class Scrapper:
         self.current_batch_insert += 1
 
         if self.current_batch_insert == properties.batch_size_inserts or force_insert:
-            self.mysql_con.execute_many(properties.stmt_stats, self.stats_to_insert)
+            self.mysql_con.execute_many(queries.stmt_stats, self.stats_to_insert)
             time.sleep(2)
-            self.mysql_con.execute_many(properties.stmt_match, self.matches_to_insert)
+            self.mysql_con.execute_many(queries.stmt_match, self.matches_to_insert)
             self.current_batch_insert = 0
             self.stats_to_insert = []
             self.matches_to_insert = []
@@ -244,6 +245,36 @@ class Scrapper:
                     print(count, id_match)
                     urls_to_insert.append((count, id_match))
 
-        self.mysql_con.execute_many(properties.stmt_finished_matches, urls_to_insert)
+        self.mysql_con.execute_many(queries.stmt_finished_matches, urls_to_insert)
 
         driverManager.quit()
+
+    def insert_filtered_active_matches(self, url_matches: list):
+        records_to_insert = []
+        for url_match in url_matches:
+            self.driverManager.get(url_match, 1)
+            soup = self.driverManager.soup
+
+            time_match: str = self.driverManager.find_elem(soup,"div", "startTime___2oy0czV", "time", 0)\
+                .get_text().split(" ")[1]
+            league: str = self.driverManager.find_elem(soup, "span", "country___24Qe-aj", "round", 0)\
+                .get_text()
+
+            #Filtering female leagues
+            if "Femenina" in league: continue
+
+            league: str = league.split(" - ")[0]
+
+            if league.split(":")[0] not in properties.current_mapping_leagues or \
+                league.split(":")[1].strip() != properties.current_mapping_leagues[league.split(":")[0]]: continue
+
+            time_match = utils.time_to_double(time_match)
+
+            records_to_insert.append((len(records_to_insert), url_match, time_match))
+
+            print(time_match, league)
+
+        self.mysql_con.execute_many(queries.stmt_active_matches, records_to_insert)
+        time.sleep(2)
+
+        self.driverManager.quit()

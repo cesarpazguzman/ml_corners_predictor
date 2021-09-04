@@ -1,30 +1,24 @@
-from mysql.connector import connect, Error, MySQLConnection
+from mysql.connector import connect, Error
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Connection as SqlAlchemyConnection
 import pandas as pd
-from core import properties
+from properties import properties
 
 
 class MySQLManager:
 
     def __init__(self):
-        self.__connection: MySQLConnection = self.__get_connection()
-        self.__connection_pd: SqlAlchemyConnection = create_engine(properties.pymsqyl_url)
+        self.__init_connection()
         if self.__connection is None or self.__connection_pd is None:
             print("Connection database error")
 
-    def __get_connection(self) -> MySQLConnection:
+    def __init_connection(self):
         try:
-            connection = connect(
-                    host=properties.mysql_host,
-                    user=properties.mysql_user,
-                    password=properties.mysql_password,
-                    database=properties.mysql_database,
-            )
-            return connection
+            self.__connection = connect(host=properties.mysql_host, user=properties.mysql_user,
+                                        password=properties.mysql_password, database=properties.mysql_database)
+            self.__connection_pd: SqlAlchemyConnection = create_engine(properties.pymsqyl_url)
         except Error as e:
             print(e)
-            return None
 
     def execute_many(self, query: str, records: list):
         try:
@@ -69,9 +63,11 @@ class MySQLManager:
             print("Something went wrong: {}".format(err))
             self.close_connection()
 
-    def select_table(self, table: str):
+    def select_table(self, table: str, where: str = ""):
         try:
-            return pd.read_sql('SELECT * FROM {0}'.format(table), con=self.__connection_pd)
+            query = 'SELECT * FROM {0} {1}'.format(table,
+                                                   "WHERE {0}".format(where) if where else "")
+            return pd.read_sql(query, con=self.__connection_pd)
         except Exception as ex:
             print("Something went wrong: {}".format(ex))
             return None
