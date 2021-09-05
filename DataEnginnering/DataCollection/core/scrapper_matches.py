@@ -249,7 +249,7 @@ class Scrapper:
 
         driverManager.quit()
 
-    def insert_filtered_active_matches(self, url_matches: list):
+    def get_filtered_active_matches(self, url_matches: list):
         records_to_insert = []
         for url_match in url_matches:
             self.driverManager.get(url_match, 1)
@@ -272,9 +272,7 @@ class Scrapper:
 
             records_to_insert.append((len(records_to_insert), url_match, time_match))
 
-            print(time_match, league)
-
-        self.mysql_con.execute_many(queries.stmt_active_matches, records_to_insert)
-        time.sleep(2)
 
         self.driverManager.quit()
+
+        return records_to_insert

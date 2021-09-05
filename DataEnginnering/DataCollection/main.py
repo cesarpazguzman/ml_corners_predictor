@@ -15,5 +15,5 @@ if __name__ == '__main__':
     #    scrapper = Scrapper()
     #    scrapper.get_stats_match(urls_matches)
     else:
-        #live_data.collect_current_day_matches()
-        live_data.get_stats_live_matches()
+        live_data.collect_current_day_matches()
+        #live_data.get_stats_live_matches()
