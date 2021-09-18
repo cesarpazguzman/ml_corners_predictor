@@ -23,8 +23,8 @@ class Scrapper:
         data = {"id_match": id_match}
 
         print(url)
-        if "Remates" not in self.driverManager.c or "Posesión de balón" not in self.driverManager.c \
-                or "Córneres" not in self.driverManager.c:
+        if "Remates" not in self.driverManager.c or "Posesion de balon" not in self.driverManager.c \
+                or "Corneres" not in self.driverManager.c:
             print("The match {0} doesn't have the minimum requirements".format(id_match))
             return {}
 
@@ -217,9 +217,9 @@ class Scrapper:
             self.matches_to_insert = []
 
     def insert_stats(self, id_match: str, stats: dict, h_a: str) -> tuple:
-        ball_possession = stats["Posesión de balón"][h_a].replace('%', '')
+        ball_possession = stats["Posesion de balon"][h_a].replace('%', '')
         goal_attempts = stats["Remates"][h_a]
-        corners = stats["Córneres"][h_a]
+        corners = stats["Corneres"][h_a]
         shots_on_goal = 0 if "Remates a puerta" not in stats else stats["Remates a puerta"][h_a]
         shots_off_goal = 0 if "Remates fuera" not in stats else stats["Remates fuera"][h_a]
         blocked_shots = 0 if "Remates rechazados" not in stats else stats["Remates rechazados"][h_a]

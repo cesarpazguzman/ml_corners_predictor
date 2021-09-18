@@ -13,10 +13,13 @@ pymsqyl_url: str = 'mysql+pymysql://root:secret@localhost/football_data'
 
 batch_size_inserts: int = 50
 
-minute_max_live: int = 88
+minute_max_live: int = 75
 
 current_mapping_leagues = {"ESPAÑA": "LaLiga Santander", "ALEMANIA": "Bundesliga", "FRANCE": "Ligue 1",
                            "INGLATERRA": "Premier League", "ITALIA": "Serie A"}
 
 #Middletime = 45 minutes = 0.75
-threshold_time = 0.75
+threshold_time = 0.75 #First time
+middletime = 0.25
+minute_75_second_part = 0.5 #30 minutes
+max_threshold_time = threshold_time + middletime + minute_75_second_part

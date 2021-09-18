@@ -12,8 +12,8 @@ def get_urls_live_matches(now=datetime.now()):
     time_now = utils.time_to_double(dt_string.split(":")[0]+":"+dt_string.split(":")[1].split(":")[0])
 
     active_matches = mysql_con.select_table("active_matches",
-                                            "{0} - time_match between >"
-                                            " {1}".format(time_now, properties.threshold_time)
+                                            "{0} - time_match between {1} and {2}"
+                                            .format(time_now, properties.threshold_time, properties.max_threshold_time)
                                             )[["URL", "TIME_MATCH"]]
 
     id_matches = list(set(active_matches["URL"].tolist()))
