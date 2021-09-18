@@ -1,5 +1,6 @@
 
 num_workers: int = 10
+num_workers_life: int = 5
 
 path_exec_chrome: str = "C:/Users/Cesar/Documents/Apuestas/chromedriver.exe"
 
@@ -12,7 +13,7 @@ pymsqyl_url: str = 'mysql+pymysql://root:secret@localhost/football_data'
 
 batch_size_inserts: int = 50
 
-minute_max_live: int = 75
+minute_max_live: int = 88
 
 current_mapping_leagues = {"ESPAÑA": "LaLiga Santander", "ALEMANIA": "Bundesliga", "FRANCE": "Ligue 1",
                            "INGLATERRA": "Premier League", "ITALIA": "Serie A"}

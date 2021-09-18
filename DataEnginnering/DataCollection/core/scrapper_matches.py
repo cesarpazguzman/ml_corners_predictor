@@ -22,6 +22,7 @@ class Scrapper:
 
         data = {"id_match": id_match}
 
+        print(url)
         if "Remates" not in self.driverManager.c or "Posesión de balón" not in self.driverManager.c \
                 or "Córneres" not in self.driverManager.c:
             print("The match {0} doesn't have the minimum requirements".format(id_match))
@@ -59,6 +60,7 @@ class Scrapper:
 
             data["comments"]: dict = self.get_comments(id_match, data["teamH"], data["teamA"])
 
+            print(data)
             return data
 
         except Exception as ex:
@@ -72,6 +74,13 @@ class Scrapper:
 
             print(self.current_batch_insert, data)
             # self.insert_data_match(data, last == id_match)
+
+        self.driverManager.quit()
+
+    def get_stats_live_matches(self, id_matches: list):
+        last = id_matches[-1]
+        for id_match in id_matches:
+            data = self.get_stats_match(id_match)
 
         self.driverManager.quit()
 
@@ -263,9 +272,11 @@ class Scrapper:
 
         driverManager.quit()
 
-    def get_filtered_active_matches(self, url_matches: list):
+    def get_filtered_active_matches(self, id_matches: list):
         records_to_insert = []
-        for url_match in url_matches:
+        for id_match in id_matches:
+            url_match = "https://www.flashscore.es/partido/{0}/#resumen-del-partido".format(id_match)
+            print(url_match)
             self.driverManager.get(url_match, 1)
             soup = self.driverManager.soup
 
@@ -284,7 +295,7 @@ class Scrapper:
 
             time_match = utils.time_to_double(time_match)
 
-            records_to_insert.append((len(records_to_insert), url_match, time_match))
+            records_to_insert.append((len(records_to_insert), id_match, time_match))
 
 
         self.driverManager.quit()
