@@ -5,9 +5,8 @@ from properties import properties, queries
 mysql_con = mysql_management.MySQLManager()
 scrapper = scrapper_matches.Scrapper()
 
-#This method will be executed each morning at 08:00 in order to collect matches of this day for Spain, Italy,
-#England, Deutsch and France.
-def collect_current_day_matches(url_football_matches="https://www.flashscore.es/?rd=mismarcadores.com"):
+
+def get_records_today_filtered(url_football_matches="https://www.flashscore.es/?rd=mismarcadores.com"):
     driver_m = driver_manager.DriverManager(adult_accept=False, headless=False)
     driver_m.get(url_football_matches)
     urls: list = []
@@ -21,14 +20,18 @@ def collect_current_day_matches(url_football_matches="https://www.flashscore.es/
         urls.append("https://www.flashscore.es/partido/{0}/#resumen-del-partido".format(
             possible_match.get_attribute('id').replace("g_1_", "")))
 
-    records_to_insert = scrapper.get_filtered_active_matches(urls)
-    print(records_to_insert)
-
-    #INSERT URLS
-    mysql_con.execute_many(queries.stmt_active_matches, records_to_insert)
+    print(urls)
 
     driver_m.quit()
 
+    return urls
+
+#This method will be executed each morning at 08:00 in order to collect matches of this day for Spain, Italy,
+#England, Deutsch and France.
+def collect_current_day_matches():
+    urls = get_records_today_filtered()
+    records_to_insert = scrapper.get_filtered_active_matches(urls)
+    mysql_con.execute_many(queries.stmt_active_matches, records_to_insert)
 
 def get_stats_live_matches():
     now = datetime.now()

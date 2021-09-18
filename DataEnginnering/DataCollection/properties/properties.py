@@ -14,8 +14,7 @@ batch_size_inserts: int = 50
 
 minute_max_live: int = 75
 
-current_mapping_leagues = {#"ESPAÑA": "LaLiga Santander",
-                           "ESPAÑA": "LaLiga SmartBank", "ALEMANIA": "Bundesliga", "FRANCE": "Ligue 1",
+current_mapping_leagues = {"ESPAÑA": "LaLiga Santander", "ALEMANIA": "Bundesliga", "FRANCE": "Ligue 1",
                            "INGLATERRA": "Premier League", "ITALIA": "Serie A"}
 
 #Middletime = 45 minutes = 0.75

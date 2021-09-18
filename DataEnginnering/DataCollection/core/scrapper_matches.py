@@ -3,6 +3,7 @@ import time
 from core.driver_manager import DriverManager
 from core import mysql_management, utils
 from properties import properties, queries
+import unidecode
 
 
 class Scrapper:
@@ -14,50 +15,63 @@ class Scrapper:
         self.matches_to_insert: list = []
         self.current_batch_insert: int = 0
 
-    def get_stats_match(self, id_matches: list):
+    def get_stats_match(self, id_match: str) -> dict:
+        url = "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/0".format(id_match)
+        self.driverManager.get(url, 1)
+        soup = self.driverManager.soup
+
+        data = {"id_match": id_match}
+
+        if "Remates" not in self.driverManager.c or "Posesión de balón" not in self.driverManager.c \
+                or "Córneres" not in self.driverManager.c:
+            print("The match {0} doesn't have the minimum requirements".format(id_match))
+            return {}
+
+        try:
+            outcome = self.driverManager.find_elem(soup, "div", "wrapper___3rU3Jah", "outcome", 0)
+            data["goals_h"]: str = outcome.find_all("span")[0].get_text()
+            data["goals_a"]: str = outcome.find_all("span")[2].get_text()
+            data["time"]: str = \
+            self.driverManager.find_elem(soup, "div", "startTime___2oy0czV", "time", 0).get_text().split(" ")[0]
+            data["round"]: str = \
+            self.driverManager.find_elem(soup, "span", "country___24Qe-aj", "round", 0).get_text().split("Jornada ")[1]
+            data["league"]: str = \
+            unidecode.unidecode(self.driverManager
+                                .find_elem(soup, "span", "country___24Qe-aj", "round", 0).get_text().split(" - ")[0]
+                                .split(":")[0])
+
+            data["teamH"]: str = unidecode.unidecode(self.driverManager.find_elem(
+                soup, "div", "participantName___3lRDM1i overflow___cyQxKBr", "teamH", 0)
+                                                     .find("a").get_text())
+            data["teamA"]: str = unidecode.unidecode(self.driverManager.find_elem(
+                soup, "div", "participantName___3lRDM1i overflow___cyQxKBr", "teamA", 1)
+                                                     .find("a").get_text())
+
+            data["odds_h"], data["odds_a"], data["odds_hx"], data["odds_ax"] = self.get_cuotas()
+
+            data["stats_total"]: dict = self.get_stats()
+            data["stats_first_time"]: dict = self.get_stats_time(
+                "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(
+                    id_match))
+            data["stats_second_time"]: dict = self.get_stats_time(
+                "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
+                    id_match))
+
+            data["comments"]: dict = self.get_comments(id_match, data["teamH"], data["teamA"])
+
+            return data
+
+        except Exception as ex:
+            print("Error unknown scrapping {0}".format(id_match), ex)
+            return {}
+
+    def get_stats_matches(self, id_matches: list):
         last = id_matches[-1]
         for id_match in id_matches:
-            url = "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/0".format(id_match)
-            self.driverManager.get(url, 1)
-            soup = self.driverManager.soup
+            data = self.get_stats_match(id_match)
 
-            data = {"id_match": id_match}
-
-            if "Remates" not in self.driverManager.c or "Posesión de balón" not in self.driverManager.c \
-                    or "Córneres" not in self.driverManager.c:
-                print("The match {0} doesn't have the minimum requirements".format(id_match))
-                continue
-
-            try:
-                outcome = self.driverManager.find_elem(soup, "div", "wrapper___3rU3Jah", "outcome", 0)
-                data["goals_h"]: str = outcome.find_all("span")[0].get_text()
-                data["goals_a"]: str = outcome.find_all("span")[2].get_text()
-                data["time"]: str = self.driverManager.find_elem(soup,"div", "startTime___2oy0czV", "time", 0).get_text().split(" ")[0]
-                data["round"]: str = self.driverManager.find_elem(soup,"span", "country___24Qe-aj", "round", 0).get_text().split("Jornada ")[1]
-                data["league"]: str = self.driverManager.find_elem(soup, "span", "country___24Qe-aj", "round", 0).get_text().split(" - ")[0]\
-                    .split(":")[0]
-
-                data["teamH"]: str = self.driverManager.find_elem(soup, "div", "participantName___3lRDM1i overflow___cyQxKBr", "teamH", 0)\
-                    .find("a").get_text()
-                data["teamA"]: str = self.driverManager.find_elem(soup, "div", "participantName___3lRDM1i overflow___cyQxKBr", "teamA", 1)\
-                    .find("a").get_text()
-
-                data["odds_h"], data["odds_a"], data["odds_hx"], data["odds_ax"] = self.get_cuotas()
-
-                data["stats_total"]: dict = self.get_stats()
-                data["stats_first_time"]: dict = self.get_stats_time(
-                    "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(id_match))
-                data["stats_second_time"]: dict = self.get_stats_time(
-                    "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
-                        id_match))
-
-                data["comments"]: dict = self.get_comments(id_match, data["teamH"], data["teamA"])
-
-                print(self.current_batch_insert, data)
-                #self.insert_data_match(data, last == id_match)
-
-            except:
-                print("Error unknown scrapping {0}".format(id_match))
+            print(self.current_batch_insert, data)
+            # self.insert_data_match(data, last == id_match)
 
         self.driverManager.quit()
 
@@ -101,7 +115,7 @@ class Scrapper:
                 val2: str = self.driverManager.find_elem(stats_match[i], "div", "awayValue___SXUUfSH", val1, 0)\
                     .get_text()
 
-                stats[title] = {"Home": val1, "Away": val2}
+                stats[unidecode.unidecode(title)] = {"Home": val1, "Away": val2}
                 i += 1
 
             except: break
