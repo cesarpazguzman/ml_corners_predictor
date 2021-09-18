@@ -1,7 +1,8 @@
 import time
 
 from DataCollection.core.driver_manager import DriverManager
-from DataCollection.core import mysql_management, utils
+from DataCollection.core import utils
+from Database import mysql_management
 from DataCollection.properties import properties, queries
 import unidecode
 
@@ -23,8 +24,8 @@ class Scrapper:
         data = {"id_match": id_match}
 
         print(url)
-        if "Remates" not in self.driverManager.c or "Posesion de balon" not in self.driverManager.c \
-                or "Corneres" not in self.driverManager.c:
+        if "Remates" not in self.driverManager.c or "Posesión de balón" not in self.driverManager.c \
+                or "Córneres" not in self.driverManager.c:
             print("The match {0} doesn't have the minimum requirements".format(id_match))
             return {}
 

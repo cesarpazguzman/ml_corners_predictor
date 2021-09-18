@@ -1,4 +1,5 @@
-from DataCollection.core import mysql_management, driver_manager, scrapper_matches
+from DataCollection.core import driver_manager, scrapper_matches
+from Database import mysql_management
 from DataCollection.properties import queries
 
 

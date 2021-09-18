@@ -1,4 +1,5 @@
-from DataCollection.core import scrapper_matches as sm, mysql_management
+from DataCollection.core import scrapper_matches as sm
+from Database import mysql_management
 from datetime import datetime
 from DataCollection.core import utils
 from DataCollection.properties import properties

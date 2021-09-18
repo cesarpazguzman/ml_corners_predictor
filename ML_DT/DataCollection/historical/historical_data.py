@@ -1,4 +1,4 @@
-from DataCollection.core import mysql_management
+from Database import mysql_management
 import concurrent.futures
 from DataCollection.core import scrapper_matches as sm
 from DataCollection.core import utils
