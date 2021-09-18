@@ -2,7 +2,7 @@ from mysql.connector import connect, Error
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Connection as SqlAlchemyConnection
 import pandas as pd
-from properties import properties
+from DataCollection.properties import properties
 
 
 class MySQLManager:

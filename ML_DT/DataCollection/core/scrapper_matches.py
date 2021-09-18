@@ -1,8 +1,8 @@
 import time
 
-from core.driver_manager import DriverManager
-from core import mysql_management, utils
-from properties import properties, queries
+from DataCollection.core.driver_manager import DriverManager
+from DataCollection.core import mysql_management, utils
+from DataCollection.properties import properties, queries
 import unidecode
 
 

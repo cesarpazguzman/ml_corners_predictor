@@ -1,8 +1,8 @@
-from core import mysql_management
+from DataCollection.core import mysql_management
 import concurrent.futures
-from core import scrapper_matches as sm
-from core import utils
-from properties import properties
+from DataCollection.core import scrapper_matches as sm
+from DataCollection.core import utils
+from DataCollection.properties import properties
 
 mysql_con = mysql_management.MySQLManager()
 
