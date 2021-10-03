@@ -63,10 +63,11 @@ class MySQLManager:
             print("Something went wrong: {}".format(err))
             self.close_connection()
 
-    def select_table(self, table: str, where: str = ""):
+    def select_table(self, table: str, where: str = "", sort: str= ""):
         try:
-            query = 'SELECT * FROM {0} {1}'.format(table,
-                                                   "WHERE {0}".format(where) if where else "")
+            query = 'SELECT * FROM {0} {1} {2}'.format(table,
+                                                       "WHERE {0}".format(where) if where else "",
+                                                       "ORDER BY {0} desc".format(sort) if sort else "")
             return pd.read_sql(query, con=self.__connection_pd)
         except Exception as ex:
             print("Something went wrong: {}".format(ex))

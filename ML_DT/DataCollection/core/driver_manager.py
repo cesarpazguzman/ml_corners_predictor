@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
+from webdriver_manager.chrome import ChromeDriverManager
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -16,8 +17,9 @@ class DriverManager:
         options = Options()
         options.headless = headless
         options.add_argument('--blink-settings=imagesEnabled=false')
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
         options.add_argument("--disable-popup-blocking")
-        self.driver = webdriver.Chrome(properties.path_exec_chrome, options=options)
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
         if adult_accept:
             self.version_18()

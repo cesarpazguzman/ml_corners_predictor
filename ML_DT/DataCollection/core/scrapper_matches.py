@@ -30,23 +30,30 @@ class Scrapper:
             return {}
 
         try:
-            outcome = self.driverManager.find_elem(soup, "div", "wrapper___3rU3Jah", "outcome", 0)
+            outcome = self.driverManager.find_elem(soup, "div", "detailScore__wrapper", "outcome", 0)
             data["goals_h"]: str = outcome.find_all("span")[0].get_text()
             data["goals_a"]: str = outcome.find_all("span")[2].get_text()
+
             data["time"]: str = \
-            self.driverManager.find_elem(soup, "div", "startTime___2oy0czV", "time", 0).get_text().split(" ")[0]
+            self.driverManager.find_elem(soup, "div", "duelParticipant__startTime", "time", 0).get_text().split(" ")[0]
+
+            if "Descenso" in self.driverManager.find_elem(soup, "span",
+                                                          "tournamentHeader__country", "round", 0).get_text():
+                return {}
+
             data["round"]: str = \
-            self.driverManager.find_elem(soup, "span", "country___24Qe-aj", "round", 0).get_text().split("Jornada ")[1]
+            self.driverManager.find_elem(soup, "span", "tournamentHeader__country", "round", 0).get_text().split("Jornada ")[1]
+
             data["league"]: str = \
             unidecode.unidecode(self.driverManager
-                                .find_elem(soup, "span", "country___24Qe-aj", "round", 0).get_text().split(" - ")[0]
+                                .find_elem(soup, "span", "tournamentHeader__country", "round", 0).get_text().split(" - ")[0]
                                 .split(":")[0])
 
             data["teamH"]: str = unidecode.unidecode(self.driverManager.find_elem(
-                soup, "div", "participantName___3lRDM1i overflow___cyQxKBr", "teamH", 0)
+                soup, "div", "participant__participantName participant__overflow", "teamH", 0)
                                                      .find("a").get_text())
             data["teamA"]: str = unidecode.unidecode(self.driverManager.find_elem(
-                soup, "div", "participantName___3lRDM1i overflow___cyQxKBr", "teamA", 1)
+                soup, "div", "participant__participantName participant__overflow", "teamA", 1)
                                                      .find("a").get_text())
 
             data["odds_h"], data["odds_a"], data["odds_hx"], data["odds_ax"] = self.get_cuotas()
@@ -61,9 +68,7 @@ class Scrapper:
 
             data["comments"]: dict = self.get_comments(id_match, data["teamH"], data["teamA"])
 
-            print(data)
             return data
-
         except Exception as ex:
             print("Error unknown scrapping {0}".format(id_match), ex)
             return {}
@@ -72,9 +77,9 @@ class Scrapper:
         last = id_matches[-1]
         for id_match in id_matches:
             data = self.get_stats_match(id_match)
-
-            print(self.current_batch_insert, data)
-            # self.insert_data_match(data, last == id_match)
+            if data != {}:
+                 #print(self.current_batch_insert, data)
+                 self.insert_data_match(data, last == id_match)
 
         self.driverManager.quit()
 
@@ -89,9 +94,9 @@ class Scrapper:
         soup = self.driverManager.soup
         try:
 
-            odd_h: str = self.driverManager.find_elem(soup, "div", "cellWrapper___2KG4ULl", "odd_h", 0)\
+            odd_h: str = self.driverManager.find_elem(soup, "div", "cellWrapper", "odd_h", 0)\
                 .find_all("span")[0].find_all("span")[1].get_text()
-            odd_a: str = self.driverManager.find_elem(soup, "div", "cellWrapper___2KG4ULl", "odd_h", 2)\
+            odd_a: str = self.driverManager.find_elem(soup, "div", "cellWrapper", "odd_h", 2)\
                 .find_all("span")[0].find_all("span")[1].get_text()
         except:
             odd_h = -1
@@ -113,16 +118,16 @@ class Scrapper:
         return self.get_stats()
 
     def get_stats(self) -> dict:
-        stats_match = self.driverManager.find_elem(self.driverManager.soup, "div", "statRow___3x8JuS9", "stats")
+        stats_match = self.driverManager.find_elem(self.driverManager.soup, "div", "statRow", "stats")
         i = 0
         stats = {}
         while True:
             try:
-                val1: str = self.driverManager.find_elem(stats_match[i], "div", "homeValue___Al8xBea", "val1", 0)\
+                val1: str = self.driverManager.find_elem(stats_match[i], "div", "statHomeValue", "val1", 0)\
                     .get_text()
-                title: str = self.driverManager.find_elem(stats_match[i], "div", "categoryName___3Keq6yi", val1, 0)\
+                title: str = self.driverManager.find_elem(stats_match[i], "div", "statCategoryName", val1, 0)\
                     .get_text()
-                val2: str = self.driverManager.find_elem(stats_match[i], "div", "awayValue___SXUUfSH", val1, 0)\
+                val2: str = self.driverManager.find_elem(stats_match[i], "div", "statAwayValue", val1, 0)\
                     .get_text()
 
                 stats[unidecode.unidecode(title)] = {"Home": val1, "Away": val2}
@@ -138,14 +143,14 @@ class Scrapper:
         list_comments = {team_h: {"gol":[], "corners":[]},
                          team_a: {"gol":[], "corners":[]}}
 
-        comments = self.driverManager.find_elem(self.driverManager.soup, "div", "row___2o4yBki", "comments")
+        comments = self.driverManager.find_elem(self.driverManager.soup, "div", "soccer__row", "comments")
 
         for comment in comments:
-            type_comment = "corners" if comment.find_all("svg",{"class":"corner___qyvhu5w"}) else False
+            type_comment = "corners" if comment.find_all("svg",{"class":"corner-ico"}) else False
             if type_comment:
-                comment_text = self.driverManager.find_elem(comment, "div", "comment___1wPYbke", "comment_text", 0)\
+                comment_text = self.driverManager.find_elem(comment, "div", "soccer__comment", "comment_text", 0)\
                     .get_text()
-                comment_time = self.driverManager.find_elem(comment, "div", "time___13X5bGP", "comment_text", 0)\
+                comment_time = self.driverManager.find_elem(comment, "div", "soccer__time", "comment_text", 0)\
                     .get_text().replace("'", "")
                 comment_team = team_h.split(" ")[0] in comment_text and team_h or \
                                team_a.split(" ")[0] in comment_text and team_a or False
@@ -156,20 +161,20 @@ class Scrapper:
             "https://www.flashscore.es/partido/{0}/#resumen-del-partido/resumen-del-partido".format(id_match), 1)
 
         events_home = self.driverManager.find_elem(self.driverManager.soup, "div",
-                                                   "summaryVerticalScore___3x0kuLg homeParticipant___1RqKe4V",
+                                                   "smv__participantRow smv__homeParticipant",
                                                    "events_home")
 
         for event in events_home:
-            if event.find_all("svg", {"class":"footballGoal___a0A1PzP"}):
-                gol_time = self.driverManager.find_elem(event, "div", "timeBox___16CXu5a", "gol_time_h", 0).get_text()
+            if event.find_all("svg", {"class":"footballGoal-ico"}):
+                gol_time = self.driverManager.find_elem(event, "div", "smv__timeBox", "gol_time_h", 0).get_text()
                 list_comments[team_h]["gol"].append(gol_time)
 
         events_away = self.driverManager.find_elem(self.driverManager.soup, "div",
-                                                   "summaryVerticalScore___3x0kuLg awayParticipant___o6T_Xev",
+                                                   "smv__participantRow smv__awayParticipant",
                                                    "events_away")
         for event in events_away:
-            if event.find_all("svg", {"class": "footballGoal___a0A1PzP"}):
-                gol_time = self.driverManager.find_elem(event, "div", "timeBox___16CXu5a", "gol_time_a", 0).get_text()
+            if event.find_all("svg", {"class": "footballGoal-ico"}):
+                gol_time = self.driverManager.find_elem(event, "div", "smv__timeBox", "gol_time_a", 0).get_text()
                 list_comments[team_a]["gol"].append(gol_time)
 
         return list_comments
@@ -240,8 +245,11 @@ class Scrapper:
                 free_kicks, offsides, throw_in, goalkeeper_saves, fouls, yellow_cards, red_cards, completed_passes,
                 tackles, attacks, dangerous_attacks)
 
-    def get_all_matches_url(self, urls_league: list, url_finished_present: list):
+    def get_all_matches_url(self, urls_league: list, url_finished_present: list, current=False):
         driverManager = DriverManager(adult_accept=False, headless=False)
+
+        # If we want to update only the last season
+        if current: urls_league = [urls_league[0]]
 
         urls_to_insert = []
         for url in urls_league:
@@ -264,7 +272,6 @@ class Scrapper:
 
                 id_match = match.get_attribute('id').replace("g_1_", "")
                 count += 1
-
                 if id_match not in url_finished_present:
                     print(count, id_match)
                     urls_to_insert.append((count, id_match))
