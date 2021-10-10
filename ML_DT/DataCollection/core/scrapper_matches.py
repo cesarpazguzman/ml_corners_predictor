@@ -37,6 +37,9 @@ class Scrapper:
             data["time"]: str = \
             self.driverManager.find_elem(soup, "div", "duelParticipant__startTime", "time", 0).get_text().split(" ")[0]
 
+            data["time"] = data["time"].split(".")[2] + '-' + data["time"].split(".")[1] + '-' + \
+                           data["time"].split(".")[0]
+
             if "Descenso" in self.driverManager.find_elem(soup, "span",
                                                           "tournamentHeader__country", "round", 0).get_text():
                 return {}
