@@ -31,10 +31,10 @@ class Scrapper:
 
         try:
             outcome = self.driverManager.find_elem(soup, "div", "detailScore__wrapper", "outcome", 0)
-            data["goals_h"]: str = outcome.find_all("span")[0].get_text()
-            data["goals_a"]: str = outcome.find_all("span")[2].get_text()
+            data["goals_h"] = outcome.find_all("span")[0].get_text()
+            data["goals_a"] = outcome.find_all("span")[2].get_text()
 
-            data["time"]: str = \
+            data["time"] = \
             self.driverManager.find_elem(soup, "div", "duelParticipant__startTime", "time", 0).get_text().split(" ")[0]
 
             data["time"] = data["time"].split(".")[2] + '-' + data["time"].split(".")[1] + '-' + \
@@ -44,32 +44,32 @@ class Scrapper:
                                                           "tournamentHeader__country", "round", 0).get_text():
                 return {}
 
-            data["round"]: str = \
+            data["round"] = \
             self.driverManager.find_elem(soup, "span", "tournamentHeader__country", "round", 0).get_text().split("Jornada ")[1]
 
-            data["league"]: str = \
+            data["league"] = \
             unidecode.unidecode(self.driverManager
                                 .find_elem(soup, "span", "tournamentHeader__country", "round", 0).get_text().split(" - ")[0]
                                 .split(":")[0])
 
-            data["teamH"]: str = unidecode.unidecode(self.driverManager.find_elem(
+            data["teamH"] = unidecode.unidecode(self.driverManager.find_elem(
                 soup, "div", "participant__participantName participant__overflow", "teamH", 0)
                                                      .find("a").get_text())
-            data["teamA"]: str = unidecode.unidecode(self.driverManager.find_elem(
+            data["teamA"] = unidecode.unidecode(self.driverManager.find_elem(
                 soup, "div", "participant__participantName participant__overflow", "teamA", 1)
                                                      .find("a").get_text())
 
             data["odds_h"], data["odds_a"], data["odds_hx"], data["odds_ax"] = self.get_cuotas()
 
-            data["stats_total"]: dict = self.get_stats()
-            data["stats_first_time"]: dict = self.get_stats_time(
+            data["stats_total"] = self.get_stats()
+            data["stats_first_time"] = self.get_stats_time(
                 "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(
                     id_match))
-            data["stats_second_time"]: dict = self.get_stats_time(
+            data["stats_second_time"]= self.get_stats_time(
                 "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
                     id_match))
 
-            data["comments"]: dict = self.get_comments(id_match, data["teamH"], data["teamA"])
+            data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
 
             return data
         except Exception as ex:
@@ -80,9 +80,7 @@ class Scrapper:
         last = id_matches[-1]
         for id_match in id_matches:
             data = self.get_stats_match(id_match)
-            if data != {}:
-                 #print(self.current_batch_insert, data)
-                 self.insert_data_match(data, last == id_match)
+            self.insert_data_match(data, last == id_match)
 
         self.driverManager.quit()
 
@@ -183,39 +181,41 @@ class Scrapper:
         return list_comments
 
     def insert_data_match(self, data: dict, force_insert=False):
-        id_match = data["id_match"]
-        ht = self.insert_stats(id_match + "HT", data["stats_total"], "Home")
-        h1 = self.insert_stats(id_match + "H1", data["stats_first_time"], "Home")
-        h2 = self.insert_stats(id_match + "H2", data["stats_second_time"], "Home")
-        at = self.insert_stats(id_match + "AT", data["stats_total"], "Away")
-        a1 = self.insert_stats(id_match + "A1", data["stats_first_time"], "Away")
-        a2 = self.insert_stats(id_match + "A2", data["stats_second_time"], "Away")
-        self.stats_to_insert.append(ht)
-        self.stats_to_insert.append(h1)
-        self.stats_to_insert.append(h2)
-        self.stats_to_insert.append(at)
-        self.stats_to_insert.append(a1)
-        self.stats_to_insert.append(a2)
 
-        corners_min_h = ";".join(
-            [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamH"]]["corners"]])
+        if data !={}:
+            id_match = data["id_match"]
+            ht = self.insert_stats(id_match + "HT", data["stats_total"], "Home")
+            h1 = self.insert_stats(id_match + "H1", data["stats_first_time"], "Home")
+            h2 = self.insert_stats(id_match + "H2", data["stats_second_time"], "Home")
+            at = self.insert_stats(id_match + "AT", data["stats_total"], "Away")
+            a1 = self.insert_stats(id_match + "A1", data["stats_first_time"], "Away")
+            a2 = self.insert_stats(id_match + "A2", data["stats_second_time"], "Away")
+            self.stats_to_insert.append(ht)
+            self.stats_to_insert.append(h1)
+            self.stats_to_insert.append(h2)
+            self.stats_to_insert.append(at)
+            self.stats_to_insert.append(a1)
+            self.stats_to_insert.append(a2)
 
-        corners_min_a = ";".join(
-            [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamA"]]["corners"]])
+            corners_min_h = ";".join(
+                [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamH"]]["corners"]])
 
-        goals_min_h = ";".join(
-            [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamH"]]["gol"]])
+            corners_min_a = ";".join(
+                [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamA"]]["corners"]])
 
-        goals_min_a = ";".join(
-            [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamA"]]["gol"]])
+            goals_min_h = ";".join(
+                [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamH"]]["gol"]])
 
-        self.matches_to_insert.append((id_match, data["league"], data["round"], data["teamH"], data["teamA"],
-                                       data["time"], data["goals_h"], data["goals_a"], data["odds_h"], data["odds_hx"],
-                                       data["odds_a"], data["odds_ax"], id_match+"HT", id_match+"H1", id_match+"H2",
-                                       id_match+"AT", id_match+"A1", id_match+"A2", corners_min_h, corners_min_a,
-                                       goals_min_h, goals_min_a))
+            goals_min_a = ";".join(
+                [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamA"]]["gol"]])
 
-        self.current_batch_insert += 1
+            self.matches_to_insert.append((id_match, data["league"], data["round"], data["teamH"], data["teamA"],
+                                        data["time"], data["goals_h"], data["goals_a"], data["odds_h"], data["odds_hx"],
+                                        data["odds_a"], data["odds_ax"], id_match+"HT", id_match+"H1", id_match+"H2",
+                                        id_match+"AT", id_match+"A1", id_match+"A2", corners_min_h, corners_min_a,
+                                        goals_min_h, goals_min_a))
+
+            self.current_batch_insert += 1
 
         if self.current_batch_insert == properties.batch_size_inserts or force_insert:
             self.mysql_con.execute_many(queries.stmt_stats, self.stats_to_insert)

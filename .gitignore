@@ -13,3 +13,4 @@ ML_DT/DataCollection/properties/__pycache__/
 ML_DT/DataCollection/test/test_historical/__pycache__/
 *.pyc
 ML_DT/venv/
+.idea/inspectionProfiles/profiles_settings.xml

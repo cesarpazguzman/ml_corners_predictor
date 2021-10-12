@@ -8,7 +8,6 @@ mysql_con = mysql_management.MySQLManager()
 
 
 def get_all_matches_url(current_season=False):
-
     season_leagues_url = mysql_con.select_table("season_leagues_url", sort="ID")[["ID", "URL","LEAGUE"]]
 
     leagues = list(set(season_leagues_url["LEAGUE"].tolist()))

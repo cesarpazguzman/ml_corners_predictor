@@ -7,6 +7,9 @@ from DataCollection.properties import properties
 
 class MySQLManager:
 
+    __connection = None
+    __connection_pd = None
+    
     def __init__(self):
         self.__init_connection()
         if self.__connection is None or self.__connection_pd is None:
@@ -15,7 +18,8 @@ class MySQLManager:
     def __init_connection(self):
         try:
             self.__connection = connect(host=properties.mysql_host, user=properties.mysql_user,
-                                        password=properties.mysql_password, database=properties.mysql_database)
+                                        password=properties.mysql_password, database=properties.mysql_database,
+                                        port=properties.mysql_port)
             self.__connection_pd: SqlAlchemyConnection = create_engine(properties.pymsqyl_url)
         except Error as e:
             print(e)

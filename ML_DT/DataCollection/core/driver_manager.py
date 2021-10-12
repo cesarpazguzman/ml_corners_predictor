@@ -19,7 +19,10 @@ class DriverManager:
         options.add_argument('--blink-settings=imagesEnabled=false')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
         options.add_argument("--disable-popup-blocking")
-        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument('--headless')
+        self.driver = webdriver.Chrome(options=options)
 
         if adult_accept:
             self.version_18()
