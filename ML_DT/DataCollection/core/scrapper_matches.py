@@ -61,15 +61,17 @@ class Scrapper:
 
             data["odds_h"], data["odds_a"], data["odds_hx"], data["odds_ax"] = self.get_cuotas()
 
-            data["stats_total"] = self.get_stats()
-            data["stats_first_time"] = self.get_stats_time(
-                "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(
-                    id_match))
-            data["stats_second_time"]= self.get_stats_time(
-                "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
-                    id_match))
-
             data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
+
+            #data["stats_total"] = self.get_stats()
+            #data["stats_first_time"] = self.get_stats_time(
+            #    "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(
+            #        id_match))
+            #data["stats_second_time"]= self.get_stats_time(
+            #    "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
+            #        id_match))
+
+            #data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
 
             return data
         except Exception as ex:
@@ -80,7 +82,7 @@ class Scrapper:
         last = id_matches[-1]
         for id_match in id_matches:
             data = self.get_stats_match(id_match)
-            self.insert_data_match(data, last == id_match)
+            #self.insert_data_match(data, last == id_match)
 
         self.driverManager.quit()
 
@@ -147,6 +149,14 @@ class Scrapper:
         comments = self.driverManager.find_elem(self.driverManager.soup, "div", "soccer__row", "comments")
 
         for comment in comments:
+            comment_text = self.driverManager.find_elem(comment, "div", "soccer__comment", "comment_text", 0) \
+                .get_text()
+            
+            if "lluvia" in comment_text or "llovi" in comment_text or "llover" in comment_text \
+                    or "ojado" in comment_text or "temperatura" in comment_text or "calor" in comment_text \
+                        or "frío" in comment_text or "frio" in comment_text or "caluroso" in comment_text:
+                print(id_match, comment_text)
+            
             type_comment = "corners" if comment.find_all("svg",{"class":"corner-ico"}) else False
             if type_comment:
                 comment_text = self.driverManager.find_elem(comment, "div", "soccer__comment", "comment_text", 0)\

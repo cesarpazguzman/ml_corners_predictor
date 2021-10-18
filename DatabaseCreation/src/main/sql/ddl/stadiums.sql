@@ -1,0 +1,6 @@
+CREATE TABLE football_data.stadiums
+(
+    ID INTEGER NOT NULL,
+    TEAM VARCHAR(255) NOT NULL,
+    STADIUM VARCHAR(255) NOT NULL
+)
