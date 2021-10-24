@@ -4,6 +4,8 @@ from DataCollection.core.driver_manager import DriverManager
 from DataCollection.core import utils
 from Database import mysql_management
 from DataCollection.properties import properties, queries
+from DataCollection.core import scrapper_weather
+
 import unidecode
 
 
@@ -11,6 +13,7 @@ class Scrapper:
 
     def __init__(self):
         self.driverManager = DriverManager()
+        self.scrapper_weather = scrapper_weather.ScrapperWeather()
         self.mysql_con = mysql_management.MySQLManager()
         self.stats_to_insert: list = []
         self.matches_to_insert: list = []
@@ -34,10 +37,13 @@ class Scrapper:
             data["goals_h"] = outcome.find_all("span")[0].get_text()
             data["goals_a"] = outcome.find_all("span")[2].get_text()
 
-            data["time"] = \
-            self.driverManager.find_elem(soup, "div", "duelParticipant__startTime", "time", 0).get_text().split(" ")[0]
+            data["date"] = \
+            self.driverManager.find_elem(soup, "div", "duelParticipant__startTime", "date", 0).get_text().split(" ")[0]
 
-            data["time"] = data["time"].split(".")[2] + '-' + data["time"].split(".")[1] + '-' + \
+            data["time"] = \
+            self.driverManager.find_elem(soup, "div", "duelParticipant__startTime", "time", 0).get_text().split(" ")[1]
+
+            data["date"] = data["time"].split(".")[2] + '-' + data["time"].split(".")[1] + '-' + \
                            data["time"].split(".")[0]
 
             if "Descenso" in self.driverManager.find_elem(soup, "span",
@@ -63,15 +69,17 @@ class Scrapper:
 
             data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
 
-            #data["stats_total"] = self.get_stats()
-            #data["stats_first_time"] = self.get_stats_time(
-            #    "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(
-            #        id_match))
-            #data["stats_second_time"]= self.get_stats_time(
-            #    "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
-            #        id_match))
+            data["stats_total"] = self.get_stats()
+            data["stats_first_time"] = self.get_stats_time(
+                "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(
+                    id_match))
+            data["stats_second_time"]= self.get_stats_time(
+                "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
+                    id_match))
 
-            #data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
+            place_weather = self.mysql_con.select_table("stadiums", where=f"TEAM={data['teamH']}")[["PLACE_WEATHER"]]
+            data["weather_info"], data["temperature"], data["wind"], data["rain"], data["humidity"], data["cloudy"] = self.scrapper_weather\
+                    .get_weather_data_historical(list(set(place_weather["PLACE_WEATHER"].tolist()))[0], data["date"], data["time"])
 
             return data
         except Exception as ex:
@@ -220,10 +228,11 @@ class Scrapper:
                 [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamA"]]["gol"]])
 
             self.matches_to_insert.append((id_match, data["league"], data["round"], data["teamH"], data["teamA"],
-                                        data["time"], data["goals_h"], data["goals_a"], data["odds_h"], data["odds_hx"],
+                                        data["date"], data["time"], data["goals_h"], data["goals_a"], data["odds_h"], data["odds_hx"],
                                         data["odds_a"], data["odds_ax"], id_match+"HT", id_match+"H1", id_match+"H2",
                                         id_match+"AT", id_match+"A1", id_match+"A2", corners_min_h, corners_min_a,
-                                        goals_min_h, goals_min_a))
+                                        goals_min_h, goals_min_a, data["weather_info"], data["temperature"], data["rain"],
+                                        data["humidity"], data["cloudy"], data["wind"]))
 
             self.current_batch_insert += 1
 

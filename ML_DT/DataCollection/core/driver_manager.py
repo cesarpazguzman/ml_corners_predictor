@@ -3,26 +3,35 @@ from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
-from webdriver_manager.chrome import ChromeDriverManager
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from DataCollection.properties import properties
 
 
 class DriverManager:
 
     def __init__(self, adult_accept=True, headless=True):
-        options = Options()
-        options.headless = headless
+        options = webdriver.ChromeOptions()
+        #options.headless = False
+        #options.binary_location = "/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
+        #options.binary_location = "/mnt/c/Users/cesar/Documents/chromedriver.exe"
         options.add_argument('--blink-settings=imagesEnabled=false')
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        #options.add_experimental_option('excludeSwitches', ['enable-logging'])
         options.add_argument("--disable-popup-blocking")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
+        #options.add_argument("--no-sandbox")
+        #options.add_argument("--disable-dev-shm-usage")
         options.add_argument('--headless')
-        self.driver = webdriver.Chrome(options=options)
+        #options.add_argument("start-maximized") 
+        options.add_argument("disable-infobars")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-gpu")
+
+        options.add_argument("--start-maximized") #open Browser in maximized mode
+        options.add_argument("--no-sandbox") #bypass OS security model
+        options.add_argument("--disable-dev-shm-usage") #overcome limited resource problems
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        options.add_experimental_option('useAutomationExtension', False)
+        self.driver = webdriver.Chrome(executable_path="/usr/bin/chromedriver", chrome_options=options)
 
         if adult_accept:
             self.version_18()
