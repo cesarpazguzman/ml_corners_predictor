@@ -10,7 +10,9 @@ def execute_process(process):
     if process == 1:
         #historical.get_all_matches_url()
         historical.get_stats_matches()
-        #scrapper_matches.Scrapper().get_stats_match("6VKDTAzH")
+        #sm = scrapper_matches.Scrapper()
+        #data = sm.get_stats_match("CEnQwkhs")
+        #sm.insert_data_match(data, True)
         #sw.ScrapperWeather().get_weather_data_historical("","")
     elif process == 2:
         live.collect_current_day_matches()

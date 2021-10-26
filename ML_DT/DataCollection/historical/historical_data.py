@@ -33,4 +33,5 @@ def get_stats_matches():
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
         futures = []
         for url_matches in splitted_matches:
+            print(url_matches)
             futures.append(executor.submit(sm.Scrapper().get_stats_matches, url_matches))

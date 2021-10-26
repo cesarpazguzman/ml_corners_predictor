@@ -47,8 +47,8 @@ class Scrapper:
             data["date"] = data["date"].split(".")[2] + '-' + data["date"].split(".")[1] + '-' + \
                             data["date"].split(".")[0]
 
-            if "Descenso" in self.driverManager.find_elem(soup, "span",
-                                                            "tournamentHeader__country", "round", 0).get_text():
+            if "Descenso" in self.driverManager.find_elem(soup, "span", "tournamentHeader__country", "round", 0).get_text():
+                print("Descenso")
                 self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
                 return {}
 
@@ -84,7 +84,7 @@ class Scrapper:
             data["weather_info"], data["temperature"], data["wind"], data["rain"], data["humidity"], data["cloudy"] = self.scrapper_weather\
                     .get_weather_data_historical(list(set(place_weather["PLACE_WEATHER"].tolist()))[0], data["date"], data["time"])
 
-            #print(local, data["date"], data["teamA"])
+            print(local, data["date"], data["teamA"])
 
             return data
         except Exception as ex:
@@ -96,11 +96,11 @@ class Scrapper:
     def get_stats_matches(self, id_matches: list):
         for id_match in id_matches:
             data = self.get_stats_match(id_match)
+            #if not data: print("Nada")
             self.insert_data_match(data)
+            #print(data["id_match"], data["teamH"], data["teamA"], data["data"], len(self.matches_to_insert))
 
-        if self.current_batch_insert > 0:
-            self.insert_records()
-
+        self.insert_records()
         self.driverManager.quit()
         self.scrapper_weather.driverManager.quit()
 
@@ -155,7 +155,8 @@ class Scrapper:
                 stats[unidecode.unidecode(title)] = {"Home": val1, "Away": val2}
                 i += 1
 
-            except: break
+            except:
+                break
 
         return stats
 
@@ -213,13 +214,18 @@ class Scrapper:
             at = self.insert_stats(id_match + "AT", data["stats_total"], "Away")
             a1 = self.insert_stats(id_match + "A1", data["stats_first_time"], "Away")
             a2 = self.insert_stats(id_match + "A2", data["stats_second_time"], "Away")
+
+            if not ht or not h1 or not h2 or not at or not a1 or not a2: 
+                self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
+                return None
+                
             self.stats_to_insert.append(ht)
             self.stats_to_insert.append(h1)
             self.stats_to_insert.append(h2)
             self.stats_to_insert.append(at)
             self.stats_to_insert.append(a1)
             self.stats_to_insert.append(a2)
-
+            
             corners_min_h = ";".join(
                 [min.replace("'", "").replace("90+", "9")[:2] for min in data["comments"][data["teamH"]]["corners"]])
 
@@ -241,13 +247,14 @@ class Scrapper:
 
             self.current_batch_insert += 1
 
+            print(self.current_batch_insert)
         if self.current_batch_insert == properties.batch_size_inserts or force_insert:
             self.insert_records()
 
 
     def insert_records(self):
         self.mysql_con.execute_many(queries.stmt_stats, self.stats_to_insert)
-        time.sleep(5)
+        #time.sleep(5)
         self.mysql_con.execute_many(queries.stmt_match, self.matches_to_insert)
         self.current_batch_insert = 0
         self.stats_to_insert = []
@@ -255,27 +262,30 @@ class Scrapper:
 
 
     def insert_stats(self, id_match: str, stats: dict, h_a: str) -> tuple:
-        ball_possession = stats["Posesion de balon"][h_a].replace('%', '')
-        goal_attempts = stats["Remates"][h_a]
-        corners = stats["Corneres"][h_a]
-        shots_on_goal = 0 if "Remates a puerta" not in stats else stats["Remates a puerta"][h_a]
-        shots_off_goal = 0 if "Remates fuera" not in stats else stats["Remates fuera"][h_a]
-        blocked_shots = 0 if "Remates rechazados" not in stats else stats["Remates rechazados"][h_a]
-        free_kicks = 0 if "Tiros libres" not in stats else stats["Tiros libres"][h_a]
-        offsides = 0 if "Fueras de juego" not in stats else stats["Fueras de juego"][h_a]
-        throw_in = 0 if "Saques de banda" not in stats else stats["Saques de banda"][h_a]
-        goalkeeper_saves = 0 if "Paradas" not in stats else stats["Paradas"][h_a]
-        fouls = 0 if "Faltas" not in stats else stats["Faltas"][h_a]
-        yellow_cards = 0 if "Tarjetas amarillas" not in stats else stats["Tarjetas amarillas"][h_a]
-        red_cards = 0 if "Tarjetas rojas" not in stats else stats["Tarjetas rojas"][h_a]
-        completed_passes = 0 if "Pases totales" not in stats else stats["Pases totales"][h_a]
-        tackles = 0 if "Tackles" not in stats else stats["Tackles"][h_a]
-        attacks = 0 if "Ataques" not in stats else stats["Ataques"][h_a]
-        dangerous_attacks = 0 if "Ataques peligrosos" not in stats else stats["Ataques peligrosos"][h_a]
+        try:
+            ball_possession = stats["Posesion de balon"][h_a].replace('%', '')
+            goal_attempts = stats["Remates"][h_a]
+            corners = stats["Corneres"][h_a]
+            shots_on_goal = 0 if "Remates a puerta" not in stats else stats["Remates a puerta"][h_a]
+            shots_off_goal = 0 if "Remates fuera" not in stats else stats["Remates fuera"][h_a]
+            blocked_shots = 0 if "Remates rechazados" not in stats else stats["Remates rechazados"][h_a]
+            free_kicks = 0 if "Tiros libres" not in stats else stats["Tiros libres"][h_a]
+            offsides = 0 if "Fueras de juego" not in stats else stats["Fueras de juego"][h_a]
+            throw_in = 0 if "Saques de banda" not in stats else stats["Saques de banda"][h_a]
+            goalkeeper_saves = 0 if "Paradas" not in stats else stats["Paradas"][h_a]
+            fouls = 0 if "Faltas" not in stats else stats["Faltas"][h_a]
+            yellow_cards = 0 if "Tarjetas amarillas" not in stats else stats["Tarjetas amarillas"][h_a]
+            red_cards = 0 if "Tarjetas rojas" not in stats else stats["Tarjetas rojas"][h_a]
+            completed_passes = 0 if "Pases totales" not in stats else stats["Pases totales"][h_a]
+            tackles = 0 if "Tackles" not in stats else stats["Tackles"][h_a]
+            attacks = 0 if "Ataques" not in stats else stats["Ataques"][h_a]
+            dangerous_attacks = 0 if "Ataques peligrosos" not in stats else stats["Ataques peligrosos"][h_a]
 
-        return (id_match, ball_possession, goal_attempts, corners, shots_on_goal, shots_off_goal, blocked_shots,
-                free_kicks, offsides, throw_in, goalkeeper_saves, fouls, yellow_cards, red_cards, completed_passes,
-                tackles, attacks, dangerous_attacks)
+            return (id_match, ball_possession, goal_attempts, corners, shots_on_goal, shots_off_goal, blocked_shots,
+                    free_kicks, offsides, throw_in, goalkeeper_saves, fouls, yellow_cards, red_cards, completed_passes,
+                    tackles, attacks, dangerous_attacks)
+        except:
+            return None
 
     def get_all_matches_url(self, urls_league: list, url_finished_present: list, current=False):
         driverManager = DriverManager(adult_accept=False, headless=False)
