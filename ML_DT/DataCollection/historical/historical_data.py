@@ -24,11 +24,12 @@ def get_all_matches_url(current_season=False):
 
 
 def get_stats_matches():
-    id_matches = mysql_con.select_table("finished_matches", where="URL IN (SELECT ID FROM football_data.matches)")\
-        ["URL"].tolist()
+    id_matches = mysql_con.select_table("finished_matches", 
+        where="URL NOT IN (SELECT ID FROM football_data.matches) AND INVALID IS FALSE")["URL"].tolist()
     num_workers = properties.num_workers
     splitted_matches = list(utils.split(id_matches, num_workers))
-
+    print("N partidos: ",len(id_matches))
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
         futures = []
         for url_matches in splitted_matches:

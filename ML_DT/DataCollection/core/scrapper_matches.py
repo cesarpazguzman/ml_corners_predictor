@@ -30,6 +30,7 @@ class Scrapper:
         if "Remates" not in self.driverManager.c or "Posesión de balón" not in self.driverManager.c \
                 or "Córneres" not in self.driverManager.c:
             print("The match {0} doesn't have the minimum requirements".format(id_match))
+            self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
             return {}
 
         try:
@@ -43,11 +44,12 @@ class Scrapper:
             data["time"] = \
             self.driverManager.find_elem(soup, "div", "duelParticipant__startTime", "time", 0).get_text().split(" ")[1]
 
-            data["date"] = data["time"].split(".")[2] + '-' + data["time"].split(".")[1] + '-' + \
-                           data["time"].split(".")[0]
+            data["date"] = data["date"].split(".")[2] + '-' + data["date"].split(".")[1] + '-' + \
+                            data["date"].split(".")[0]
 
             if "Descenso" in self.driverManager.find_elem(soup, "span",
-                                                          "tournamentHeader__country", "round", 0).get_text():
+                                                            "tournamentHeader__country", "round", 0).get_text():
+                self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
                 return {}
 
             data["round"] = \
@@ -60,14 +62,12 @@ class Scrapper:
 
             data["teamH"] = unidecode.unidecode(self.driverManager.find_elem(
                 soup, "div", "participant__participantName participant__overflow", "teamH", 0)
-                                                     .find("a").get_text())
+                                                        .find("a").get_text().replace("'",""))
             data["teamA"] = unidecode.unidecode(self.driverManager.find_elem(
                 soup, "div", "participant__participantName participant__overflow", "teamA", 1)
-                                                     .find("a").get_text())
+                                                        .find("a").get_text().replace("'",""))
 
             data["odds_h"], data["odds_a"], data["odds_hx"], data["odds_ax"] = self.get_cuotas()
-
-            data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
 
             data["stats_total"] = self.get_stats()
             data["stats_first_time"] = self.get_stats_time(
@@ -77,22 +77,32 @@ class Scrapper:
                 "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
                     id_match))
 
-            place_weather = self.mysql_con.select_table("stadiums", where=f"TEAM={data['teamH']}")[["PLACE_WEATHER"]]
+            data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
+
+            local=data['teamH']
+            place_weather = self.mysql_con.select_table("stadiums", where=f"TEAM='{local}'")[["PLACE_WEATHER"]]
             data["weather_info"], data["temperature"], data["wind"], data["rain"], data["humidity"], data["cloudy"] = self.scrapper_weather\
                     .get_weather_data_historical(list(set(place_weather["PLACE_WEATHER"].tolist()))[0], data["date"], data["time"])
 
+            #print(local, data["date"], data["teamA"])
+
             return data
         except Exception as ex:
-            print("Error unknown scrapping {0}".format(id_match), ex)
+            self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
+
+            print("Error unknown scrapping {0}".format(url), ex)
             return {}
 
     def get_stats_matches(self, id_matches: list):
-        last = id_matches[-1]
         for id_match in id_matches:
             data = self.get_stats_match(id_match)
-            #self.insert_data_match(data, last == id_match)
+            self.insert_data_match(data)
+
+        if self.current_batch_insert > 0:
+            self.insert_records()
 
         self.driverManager.quit()
+        self.scrapper_weather.driverManager.quit()
 
     def get_stats_live_matches(self, id_matches: list):
         last = id_matches[-1]
@@ -130,6 +140,7 @@ class Scrapper:
 
     def get_stats(self) -> dict:
         stats_match = self.driverManager.find_elem(self.driverManager.soup, "div", "statRow", "stats")
+
         i = 0
         stats = {}
         while True:
@@ -159,11 +170,6 @@ class Scrapper:
         for comment in comments:
             comment_text = self.driverManager.find_elem(comment, "div", "soccer__comment", "comment_text", 0) \
                 .get_text()
-            
-            if "lluvia" in comment_text or "llovi" in comment_text or "llover" in comment_text \
-                    or "ojado" in comment_text or "temperatura" in comment_text or "calor" in comment_text \
-                        or "frío" in comment_text or "frio" in comment_text or "caluroso" in comment_text:
-                print(id_match, comment_text)
             
             type_comment = "corners" if comment.find_all("svg",{"class":"corner-ico"}) else False
             if type_comment:
@@ -199,7 +205,6 @@ class Scrapper:
         return list_comments
 
     def insert_data_match(self, data: dict, force_insert=False):
-
         if data !={}:
             id_match = data["id_match"]
             ht = self.insert_stats(id_match + "HT", data["stats_total"], "Home")
@@ -237,12 +242,17 @@ class Scrapper:
             self.current_batch_insert += 1
 
         if self.current_batch_insert == properties.batch_size_inserts or force_insert:
-            self.mysql_con.execute_many(queries.stmt_stats, self.stats_to_insert)
-            time.sleep(2)
-            self.mysql_con.execute_many(queries.stmt_match, self.matches_to_insert)
-            self.current_batch_insert = 0
-            self.stats_to_insert = []
-            self.matches_to_insert = []
+            self.insert_records()
+
+
+    def insert_records(self):
+        self.mysql_con.execute_many(queries.stmt_stats, self.stats_to_insert)
+        time.sleep(5)
+        self.mysql_con.execute_many(queries.stmt_match, self.matches_to_insert)
+        self.current_batch_insert = 0
+        self.stats_to_insert = []
+        self.matches_to_insert = []
+
 
     def insert_stats(self, id_match: str, stats: dict, h_a: str) -> tuple:
         ball_possession = stats["Posesion de balon"][h_a].replace('%', '')
@@ -276,7 +286,7 @@ class Scrapper:
         urls_to_insert = []
         for url in urls_league:
             driverManager.get(url)
-            driverManager.click_button_by_id("onetrust-accept-btn-handler")
+            driverManager.click_button_by_id("onetrust-accept-btn-handler", url)
 
             while True:
                 #For doing the button visible for selenium, scroll down

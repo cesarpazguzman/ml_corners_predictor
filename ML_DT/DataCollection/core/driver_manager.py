@@ -12,26 +12,18 @@ class DriverManager:
 
     def __init__(self, adult_accept=True, headless=True):
         options = webdriver.ChromeOptions()
-        #options.headless = False
         #options.binary_location = "/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
-        #options.binary_location = "/mnt/c/Users/cesar/Documents/chromedriver.exe"
         options.add_argument('--blink-settings=imagesEnabled=false')
-        #options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
         options.add_argument("--disable-popup-blocking")
-        #options.add_argument("--no-sandbox")
-        #options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
         options.add_argument('--headless')
-        #options.add_argument("start-maximized") 
+        options.add_argument("start-maximized") 
         options.add_argument("disable-infobars")
         options.add_argument("--disable-extensions")
         options.add_argument("--disable-gpu")
-
-        options.add_argument("--start-maximized") #open Browser in maximized mode
-        options.add_argument("--no-sandbox") #bypass OS security model
-        options.add_argument("--disable-dev-shm-usage") #overcome limited resource problems
-        options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        options.add_experimental_option('useAutomationExtension', False)
-        self.driver = webdriver.Chrome(executable_path="/usr/bin/chromedriver", chrome_options=options)
+        self.driver = webdriver.Chrome(chrome_options=options)
 
         if adult_accept:
             self.version_18()
@@ -42,14 +34,14 @@ class DriverManager:
         time.sleep(1.5)
         self.driver.find_elements_by_class_name("confirmationButton___38WagOL")[0].click()
 
-    def click_button_by_id(self, button_id: str) -> bool:
+    def click_button_by_id(self, button_id: str, url="") -> bool:
         try:
             button = self.driver.find_element_by_id(button_id)
             button.click()
             time.sleep(1.5)
             return True
         except Exception as ex:
-            print("Some wrong has happened -> {0}".format(ex))
+            print("Some wrong has happened -> {0}, {1}".format(url, ex))
             return False
 
     def click_button_by_class(self, class_name: str) -> bool:

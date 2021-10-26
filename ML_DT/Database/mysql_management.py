@@ -30,8 +30,7 @@ class MySQLManager:
             cursor.executemany(query, records)
             self.__connection.commit()
         except Error as err:
-            print("Something went wrong: {}".format(err))
-            self.close_connection()
+            print("Something went wrong: {0} - {1}".format(query, err))
 
     def execute(self, query: str):
         try:
@@ -39,8 +38,7 @@ class MySQLManager:
             cursor.execute(query)
             self.__connection.commit()
         except Error as err:
-            print("Something went wrong: {}".format(err))
-            self.close_connection()
+            print("Something went wrong: {0} - {1}".format(query, err))
 
     def check_table_exists(self, table: str) -> bool:
         cursor = self.__connection.cursor()
@@ -56,7 +54,6 @@ class MySQLManager:
             self.__connection.commit()
         except Error as err:
             print("Something went wrong: {}".format(err))
-            self.close_connection()
 
     def delete_records_by_condition(self, table: str, condition: str):
         try:
@@ -65,7 +62,6 @@ class MySQLManager:
             self.__connection.commit()
         except Error as err:
             print("Something went wrong: {}".format(err))
-            self.close_connection()
 
     def select_table(self, table: str, where: str = "", sort: str= ""):
         try:
@@ -74,7 +70,7 @@ class MySQLManager:
                                                        "ORDER BY {0} desc".format(sort) if sort else "")
             return pd.read_sql(query, con=self.__connection_pd)
         except Exception as ex:
-            print("Something went wrong: {}".format(ex))
+            print("Something went wrong: {0} - {1}".format(query, ex))
             return None
 
     def close_connection(self):

@@ -9,19 +9,19 @@ class ScrapperWeather:
         self.driverManager = DriverManager(adult_accept=False)
 
     def get_weather_data_historical(self, place_weather, date_match, time_match):
-        url = f"https://www.worldweatheronline.com/{place_weather}"
+        url = f"https://www.worldweatheronline.com/{place_weather.replace('weather/', 'weather-history/')}"
 
         self.driverManager.get(url, 1)
 
         year = date_match.split('-')[0]
         month = date_match.split('-')[1].split('-')[0]
-        day = date_match.split('-')[1].split('-')[1]
+        day = date_match.split('-')[2]
 
         self.driverManager.driver.find_element_by_id("ctl00_MainContentHolder_txtPastDate").send_keys(f"{month}-{day}-{year}")
         self.driverManager.click_button_by_id("ctl00_MainContentHolder_butShowPastWeather")
         time.sleep(1)
 
-        hour = int(time_match.split(":")[0])*1.0/3
+        hour = round(int(time_match.split(":")[0])*1.0/3, 0)
         init_count=14
         id_row = init_count+12*hour
 
@@ -47,7 +47,5 @@ class ScrapperWeather:
         cloudy = self.driverManager.driver\
                 .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+7}]')[0].text\
                     .replace('%','')
-
-        self.driverManager.quit()
 
         return weather_info, temperature, wind, rain, humidity, cloudy
