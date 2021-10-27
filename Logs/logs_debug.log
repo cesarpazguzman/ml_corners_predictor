@@ -1,0 +1,287 @@
+2021-10-27 20:58:59,029 logs.__main__   INFO     Start application
+2021-10-27 20:58:59,029 logs.__main__   ERROR    Error
+2021-10-27 21:04:14,411 logs.__main__   INFO     Start application
+2021-10-27 21:04:14,412 logs.execute_process INFO     Executing process: Historical
+2021-10-27 21:04:14,412 logs.DataCollection.historical.historical_data INFO     STATS MATCHES
+2021-10-27 21:04:14,447 logs.DataCollection.historical.historical_data INFO     N workers: 10
+2021-10-27 21:04:14,448 logs.DataCollection.historical.historical_data INFO     N partidos: 23
+2021-10-27 21:25:58,072 logs.__main__   INFO     Start application
+2021-10-27 21:25:58,073 logs.execute_process INFO     Executing process: Historical
+2021-10-27 21:25:58,074 logs.DataCollection.historical.historical_data INFO     STATS MATCHES
+2021-10-27 21:25:58,124 logs.DataCollection.historical.historical_data INFO     N workers: 10
+2021-10-27 21:25:58,124 logs.DataCollection.historical.historical_data INFO     N matches: 23
+2021-10-27 21:26:08,310 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Starting the execution of the worker
+2021-10-27 21:26:10,795 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Scrapping https://www.flashscore.es/partido/xA1hxHbK/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:10,796 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK has the minimum requirements
+2021-10-27 21:26:10,815 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK basic variables scrapped
+2021-10-27 21:26:10,820 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK bet odds scrapped
+2021-10-27 21:26:10,827 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK Stats scrapped
+2021-10-27 21:26:11,899 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK Stats first time scrapped
+2021-10-27 21:26:12,980 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK Stats second time scrapped
+2021-10-27 21:26:15,250 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK Comments scrapped
+2021-10-27 21:26:17,588 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - Starting the execution of the worker
+2021-10-27 21:26:20,218 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK Weather scrapped
+2021-10-27 21:26:20,219 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK Match totally scrapped
+2021-10-27 21:26:20,220 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - xA1hxHbK Match inserted
+2021-10-27 21:26:20,355 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - Scrapping https://www.flashscore.es/partido/2kOvNJ5p/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:20,356 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p has the minimum requirements
+2021-10-27 21:26:20,376 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p basic variables scrapped
+2021-10-27 21:26:20,383 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p bet odds scrapped
+2021-10-27 21:26:20,389 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p Stats scrapped
+2021-10-27 21:26:21,476 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p Stats first time scrapped
+2021-10-27 21:26:22,263 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Scrapping https://www.flashscore.es/partido/Yg2NWfMs/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:22,276 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs has the minimum requirements
+2021-10-27 21:26:22,325 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs basic variables scrapped
+2021-10-27 21:26:22,343 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs bet odds scrapped
+2021-10-27 21:26:22,361 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs Stats scrapped
+2021-10-27 21:26:22,627 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p Stats second time scrapped
+2021-10-27 21:26:23,521 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs Stats first time scrapped
+2021-10-27 21:26:24,662 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs Stats second time scrapped
+2021-10-27 21:26:24,887 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p Comments scrapped
+2021-10-27 21:26:26,834 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs Comments scrapped
+2021-10-27 21:26:27,602 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Starting the execution of the worker
+2021-10-27 21:26:29,746 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p Weather scrapped
+2021-10-27 21:26:29,747 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p Match totally scrapped
+2021-10-27 21:26:29,748 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - 2kOvNJ5p Match inserted
+2021-10-27 21:26:30,242 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Scrapping https://www.flashscore.es/partido/OrezUh60/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:30,243 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 has the minimum requirements
+2021-10-27 21:26:30,265 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 basic variables scrapped
+2021-10-27 21:26:30,273 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 bet odds scrapped
+2021-10-27 21:26:30,283 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 Stats scrapped
+2021-10-27 21:26:31,387 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 Stats first time scrapped
+2021-10-27 21:26:31,446 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs Weather scrapped
+2021-10-27 21:26:31,446 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs Match totally scrapped
+2021-10-27 21:26:31,448 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Yg2NWfMs Match inserted
+2021-10-27 21:26:31,704 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - Scrapping https://www.flashscore.es/partido/ULeWUYjf/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:31,705 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf has the minimum requirements
+2021-10-27 21:26:31,722 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf basic variables scrapped
+2021-10-27 21:26:31,728 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf bet odds scrapped
+2021-10-27 21:26:31,735 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf Stats scrapped
+2021-10-27 21:26:32,561 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 Stats second time scrapped
+2021-10-27 21:26:33,120 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf Stats first time scrapped
+2021-10-27 21:26:33,626 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Scrapping https://www.flashscore.es/partido/b1mmRjjJ/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:33,626 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ has the minimum requirements
+2021-10-27 21:26:33,645 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ basic variables scrapped
+2021-10-27 21:26:33,655 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ bet odds scrapped
+2021-10-27 21:26:33,667 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ Stats scrapped
+2021-10-27 21:26:34,266 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf Stats second time scrapped
+2021-10-27 21:26:34,849 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ Stats first time scrapped
+2021-10-27 21:26:34,907 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 Comments scrapped
+2021-10-27 21:26:35,981 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ Stats second time scrapped
+2021-10-27 21:26:36,552 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf Comments scrapped
+2021-10-27 21:26:38,169 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ Comments scrapped
+2021-10-27 21:26:38,606 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - Starting the execution of the worker
+2021-10-27 21:26:39,841 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 Weather scrapped
+2021-10-27 21:26:39,842 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 Match totally scrapped
+2021-10-27 21:26:39,844 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - OrezUh60 Match inserted
+2021-10-27 21:26:41,102 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf Weather scrapped
+2021-10-27 21:26:41,103 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf Match totally scrapped
+2021-10-27 21:26:41,105 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - ULeWUYjf Match inserted
+2021-10-27 21:26:41,566 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - Scrapping https://www.flashscore.es/partido/dEO5ED6D/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:41,567 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D has the minimum requirements
+2021-10-27 21:26:41,583 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D basic variables scrapped
+2021-10-27 21:26:41,589 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D bet odds scrapped
+2021-10-27 21:26:41,596 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D Stats scrapped
+2021-10-27 21:26:42,403 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Scrapping https://www.flashscore.es/partido/Aa1Dyp89/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:42,403 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 has the minimum requirements
+2021-10-27 21:26:42,423 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 basic variables scrapped
+2021-10-27 21:26:42,429 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 bet odds scrapped
+2021-10-27 21:26:42,434 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 Stats scrapped
+2021-10-27 21:26:42,688 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D Stats first time scrapped
+2021-10-27 21:26:42,973 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ Weather scrapped
+2021-10-27 21:26:42,974 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ Match totally scrapped
+2021-10-27 21:26:42,975 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - b1mmRjjJ Match inserted
+2021-10-27 21:26:43,016 logs.DataCollection.core.scrapper_matches INFO     WORKER1 - Finished worker
+2021-10-27 21:26:43,154 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - Scrapping https://www.flashscore.es/partido/GIiSVEyl/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:43,166 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl has the minimum requirements
+2021-10-27 21:26:43,220 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl basic variables scrapped
+2021-10-27 21:26:43,236 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl bet odds scrapped
+2021-10-27 21:26:43,254 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl Stats scrapped
+2021-10-27 21:26:43,519 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 Stats first time scrapped
+2021-10-27 21:26:43,796 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D Stats second time scrapped
+2021-10-27 21:26:44,413 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl Stats first time scrapped
+2021-10-27 21:26:44,642 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 Stats second time scrapped
+2021-10-27 21:26:45,516 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl Stats second time scrapped
+2021-10-27 21:26:46,035 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D Comments scrapped
+2021-10-27 21:26:46,863 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 Comments scrapped
+2021-10-27 21:26:47,826 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl Comments scrapped
+2021-10-27 21:26:49,629 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - Starting the execution of the worker
+2021-10-27 21:26:51,052 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D Weather scrapped
+2021-10-27 21:26:51,053 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D Match totally scrapped
+2021-10-27 21:26:51,054 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - dEO5ED6D Match inserted
+2021-10-27 21:26:51,463 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 Weather scrapped
+2021-10-27 21:26:51,464 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 Match totally scrapped
+2021-10-27 21:26:51,464 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Aa1Dyp89 Match inserted
+2021-10-27 21:26:51,614 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - Scrapping https://www.flashscore.es/partido/fZH5pFYM/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:51,615 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM has the minimum requirements
+2021-10-27 21:26:51,636 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM basic variables scrapped
+2021-10-27 21:26:51,644 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM bet odds scrapped
+2021-10-27 21:26:51,652 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM Stats scrapped
+2021-10-27 21:26:52,429 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl Weather scrapped
+2021-10-27 21:26:52,429 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl Match totally scrapped
+2021-10-27 21:26:52,430 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - GIiSVEyl Match inserted
+2021-10-27 21:26:52,464 logs.DataCollection.core.scrapper_matches INFO     WORKER2 - Finished worker
+2021-10-27 21:26:52,765 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM Stats first time scrapped
+2021-10-27 21:26:53,159 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - Scrapping https://www.flashscore.es/partido/pbySWu4i/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:53,160 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i has the minimum requirements
+2021-10-27 21:26:53,191 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i basic variables scrapped
+2021-10-27 21:26:53,199 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i bet odds scrapped
+2021-10-27 21:26:53,210 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i Stats scrapped
+2021-10-27 21:26:53,867 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM Stats second time scrapped
+2021-10-27 21:26:54,257 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Scrapping https://www.flashscore.es/partido/AcWCRacT/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:26:54,258 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT has the minimum requirements
+2021-10-27 21:26:54,301 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT basic variables scrapped
+2021-10-27 21:26:54,325 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT bet odds scrapped
+2021-10-27 21:26:54,345 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT Stats scrapped
+2021-10-27 21:26:54,387 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i Stats first time scrapped
+2021-10-27 21:26:55,610 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT Stats first time scrapped
+2021-10-27 21:26:55,631 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i Stats second time scrapped
+2021-10-27 21:26:56,174 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM Comments scrapped
+2021-10-27 21:26:56,755 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT Stats second time scrapped
+2021-10-27 21:26:57,930 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i Comments scrapped
+2021-10-27 21:26:59,041 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT Comments scrapped
+2021-10-27 21:26:59,975 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - Starting the execution of the worker
+2021-10-27 21:27:01,199 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM Weather scrapped
+2021-10-27 21:27:01,200 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM Match totally scrapped
+2021-10-27 21:27:01,201 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - fZH5pFYM Match inserted
+2021-10-27 21:27:02,420 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i Weather scrapped
+2021-10-27 21:27:02,421 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i Match totally scrapped
+2021-10-27 21:27:02,422 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - pbySWu4i Match inserted
+2021-10-27 21:27:02,447 logs.DataCollection.core.scrapper_matches INFO     WORKER4 - Finished worker
+2021-10-27 21:27:02,630 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - Scrapping https://www.flashscore.es/partido/p0vNj4yK/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:02,633 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK has the minimum requirements
+2021-10-27 21:27:02,664 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK basic variables scrapped
+2021-10-27 21:27:02,675 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK bet odds scrapped
+2021-10-27 21:27:02,687 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK Stats scrapped
+2021-10-27 21:27:03,115 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - Scrapping https://www.flashscore.es/partido/pOM9s0b6/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:03,116 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 has the minimum requirements
+2021-10-27 21:27:03,130 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 basic variables scrapped
+2021-10-27 21:27:03,136 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 bet odds scrapped
+2021-10-27 21:27:03,141 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 Stats scrapped
+2021-10-27 21:27:03,723 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT Weather scrapped
+2021-10-27 21:27:03,724 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT Match totally scrapped
+2021-10-27 21:27:03,724 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - AcWCRacT Match inserted
+2021-10-27 21:27:03,747 logs.DataCollection.core.scrapper_matches INFO     WORKER3 - Finished worker
+2021-10-27 21:27:03,803 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK Stats first time scrapped
+2021-10-27 21:27:04,344 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 Stats first time scrapped
+2021-10-27 21:27:05,042 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK Stats second time scrapped
+2021-10-27 21:27:05,443 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 Stats second time scrapped
+2021-10-27 21:27:07,396 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK Comments scrapped
+2021-10-27 21:27:07,732 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 Comments scrapped
+2021-10-27 21:27:10,256 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - Starting the execution of the worker
+2021-10-27 21:27:12,317 logs.DataCollection.core.scrapper_matches ERROR    WORKER5 - pOM9s0b6 Error unknown scrapping: list index out of range
+2021-10-27 21:27:12,318 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 Match totally scrapped
+2021-10-27 21:27:12,319 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - pOM9s0b6 Match inserted
+2021-10-27 21:27:12,340 logs.DataCollection.core.scrapper_matches INFO     WORKER5 - Finished worker
+2021-10-27 21:27:12,392 logs.DataCollection.core.scrapper_matches ERROR    WORKER6 - p0vNj4yK Error unknown scrapping: list index out of range
+2021-10-27 21:27:12,394 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK Match totally scrapped
+2021-10-27 21:27:12,396 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - p0vNj4yK Match inserted
+2021-10-27 21:27:13,487 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - Scrapping https://www.flashscore.es/partido/IwYpqhID/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:13,488 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID has the minimum requirements
+2021-10-27 21:27:13,514 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID basic variables scrapped
+2021-10-27 21:27:13,528 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID bet odds scrapped
+2021-10-27 21:27:13,542 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID Stats scrapped
+2021-10-27 21:27:14,678 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID Stats first time scrapped
+2021-10-27 21:27:14,713 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - Scrapping https://www.flashscore.es/partido/MqQm7443/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:14,715 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 has the minimum requirements
+2021-10-27 21:27:14,747 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 basic variables scrapped
+2021-10-27 21:27:14,756 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 bet odds scrapped
+2021-10-27 21:27:14,763 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 Stats scrapped
+2021-10-27 21:27:16,115 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID Stats second time scrapped
+2021-10-27 21:27:16,196 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 Stats first time scrapped
+2021-10-27 21:27:17,459 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 Stats second time scrapped
+2021-10-27 21:27:18,772 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID Comments scrapped
+2021-10-27 21:27:19,985 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 Comments scrapped
+2021-10-27 21:27:21,695 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - Starting the execution of the worker
+2021-10-27 21:27:23,632 logs.DataCollection.core.scrapper_matches ERROR    WORKER7 - IwYpqhID Error unknown scrapping: list index out of range
+2021-10-27 21:27:23,632 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID Match totally scrapped
+2021-10-27 21:27:23,633 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - IwYpqhID Match inserted
+2021-10-27 21:27:24,084 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - Scrapping https://www.flashscore.es/partido/IayjjfKb/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:24,085 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb has the minimum requirements
+2021-10-27 21:27:24,100 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb basic variables scrapped
+2021-10-27 21:27:24,107 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb bet odds scrapped
+2021-10-27 21:27:24,112 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb Stats scrapped
+2021-10-27 21:27:24,579 logs.DataCollection.core.scrapper_matches ERROR    WORKER6 - MqQm7443 Error unknown scrapping: list index out of range
+2021-10-27 21:27:24,580 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 Match totally scrapped
+2021-10-27 21:27:24,580 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - MqQm7443 Match inserted
+2021-10-27 21:27:24,581 logs.DataCollection.core.scrapper_matches INFO     WORKER6 - Finished worker
+2021-10-27 21:27:25,178 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb Stats first time scrapped
+2021-10-27 21:27:25,807 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - Scrapping https://www.flashscore.es/partido/QPvblYlB/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:25,808 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB has the minimum requirements
+2021-10-27 21:27:25,832 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB basic variables scrapped
+2021-10-27 21:27:25,841 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB bet odds scrapped
+2021-10-27 21:27:25,847 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB Stats scrapped
+2021-10-27 21:27:26,254 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb Stats second time scrapped
+2021-10-27 21:27:26,956 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB Stats first time scrapped
+2021-10-27 21:27:28,128 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB Stats second time scrapped
+2021-10-27 21:27:28,526 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb Comments scrapped
+2021-10-27 21:27:30,449 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB Comments scrapped
+2021-10-27 21:27:31,433 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - Starting the execution of the worker
+2021-10-27 21:27:33,602 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb Weather scrapped
+2021-10-27 21:27:33,603 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb Match totally scrapped
+2021-10-27 21:27:33,603 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - IayjjfKb Match inserted
+2021-10-27 21:27:34,141 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - Scrapping https://www.flashscore.es/partido/v9xniz5h/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:34,141 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h has the minimum requirements
+2021-10-27 21:27:34,156 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h basic variables scrapped
+2021-10-27 21:27:34,161 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h bet odds scrapped
+2021-10-27 21:27:34,165 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h Stats scrapped
+2021-10-27 21:27:35,062 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB Weather scrapped
+2021-10-27 21:27:35,063 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB Match totally scrapped
+2021-10-27 21:27:35,063 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - QPvblYlB Match inserted
+2021-10-27 21:27:35,090 logs.DataCollection.core.scrapper_matches INFO     WORKER7 - Finished worker
+2021-10-27 21:27:35,251 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h Stats first time scrapped
+2021-10-27 21:27:36,240 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - Scrapping https://www.flashscore.es/partido/bcLlhGkn/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:36,246 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn has the minimum requirements
+2021-10-27 21:27:36,341 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn basic variables scrapped
+2021-10-27 21:27:36,379 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn bet odds scrapped
+2021-10-27 21:27:36,414 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn Stats scrapped
+2021-10-27 21:27:36,587 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h Stats second time scrapped
+2021-10-27 21:27:37,913 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn Stats first time scrapped
+2021-10-27 21:27:39,022 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn Stats second time scrapped
+2021-10-27 21:27:39,077 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h Comments scrapped
+2021-10-27 21:27:41,386 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn Comments scrapped
+2021-10-27 21:27:41,401 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - Starting the execution of the worker
+2021-10-27 21:27:43,555 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - Scrapping https://www.flashscore.es/partido/8AFWHo7N/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:43,556 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N has the minimum requirements
+2021-10-27 21:27:43,579 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N basic variables scrapped
+2021-10-27 21:27:43,587 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N bet odds scrapped
+2021-10-27 21:27:43,594 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N Stats scrapped
+2021-10-27 21:27:44,008 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h Weather scrapped
+2021-10-27 21:27:44,009 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h Match totally scrapped
+2021-10-27 21:27:44,011 logs.DataCollection.core.scrapper_matches ERROR    WORKER9 - v9xniz5h Stats bad scrapped. INVALID match
+2021-10-27 21:27:44,070 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - v9xniz5h Match inserted
+2021-10-27 21:27:44,749 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N Stats first time scrapped
+2021-10-27 21:27:45,901 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N Stats second time scrapped
+2021-10-27 21:27:46,129 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn Weather scrapped
+2021-10-27 21:27:46,130 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn Match totally scrapped
+2021-10-27 21:27:46,131 logs.DataCollection.core.scrapper_matches ERROR    WORKER8 - bcLlhGkn Stats bad scrapped. INVALID match
+2021-10-27 21:27:46,182 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - bcLlhGkn Match inserted
+2021-10-27 21:27:46,209 logs.DataCollection.core.scrapper_matches INFO     WORKER8 - Finished worker
+2021-10-27 21:27:46,332 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - Scrapping https://www.flashscore.es/partido/UssyZhkO/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:46,334 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO has the minimum requirements
+2021-10-27 21:27:46,357 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO basic variables scrapped
+2021-10-27 21:27:46,366 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO bet odds scrapped
+2021-10-27 21:27:46,377 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO Stats scrapped
+2021-10-27 21:27:47,544 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO Stats first time scrapped
+2021-10-27 21:27:48,185 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N Comments scrapped
+2021-10-27 21:27:48,681 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO Stats second time scrapped
+2021-10-27 21:27:50,959 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO Comments scrapped
+2021-10-27 21:27:53,271 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N Weather scrapped
+2021-10-27 21:27:53,271 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N Match totally scrapped
+2021-10-27 21:27:53,272 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - 8AFWHo7N Match inserted
+2021-10-27 21:27:54,935 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - Scrapping https://www.flashscore.es/partido/hri3CPUp/#resumen-del-partido/estadisticas-del-partido/0
+2021-10-27 21:27:54,936 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp has the minimum requirements
+2021-10-27 21:27:54,957 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp basic variables scrapped
+2021-10-27 21:27:54,964 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp bet odds scrapped
+2021-10-27 21:27:54,971 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp Stats scrapped
+2021-10-27 21:27:55,742 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO Weather scrapped
+2021-10-27 21:27:55,743 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO Match totally scrapped
+2021-10-27 21:27:55,744 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - UssyZhkO Match inserted
+2021-10-27 21:27:55,767 logs.DataCollection.core.scrapper_matches INFO     WORKER9 - Finished worker
+2021-10-27 21:27:56,067 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp Stats first time scrapped
+2021-10-27 21:27:57,323 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp Stats second time scrapped
+2021-10-27 21:27:59,668 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp Comments scrapped
+2021-10-27 21:28:04,702 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp Weather scrapped
+2021-10-27 21:28:04,704 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp Match totally scrapped
+2021-10-27 21:28:04,705 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - hri3CPUp Match inserted
+2021-10-27 21:28:04,734 logs.DataCollection.core.scrapper_matches INFO     WORKER10 - Finished worker

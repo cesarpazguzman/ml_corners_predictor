@@ -5,19 +5,23 @@ from DataCollection.core import utils
 from Database import mysql_management
 from DataCollection.properties import properties, queries
 from DataCollection.core import scrapper_weather
-
+import logging
 import unidecode
 
 
 class Scrapper:
 
-    def __init__(self):
+    def __init__(self, id_worker):
         self.driverManager = DriverManager()
         self.scrapper_weather = scrapper_weather.ScrapperWeather()
         self.mysql_con = mysql_management.MySQLManager()
         self.stats_to_insert: list = []
         self.matches_to_insert: list = []
         self.current_batch_insert: int = 0
+        self.id_worker = id_worker
+        self.logger = logging.getLogger("logs").getChild(__name__)
+
+        self.logger.info(f"WORKER{self.id_worker} - Starting the execution of the worker")
 
     def get_stats_match(self, id_match: str) -> dict:
         url = "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/0".format(id_match)
@@ -26,12 +30,16 @@ class Scrapper:
 
         data = {"id_match": id_match}
 
-        print(url)
+        self.logger.info(f"WORKER{self.id_worker} - Scrapping {url}")
         if "Remates" not in self.driverManager.c or "Posesión de balón" not in self.driverManager.c \
                 or "Córneres" not in self.driverManager.c:
-            print("The match {0} doesn't have the minimum requirements".format(id_match))
+            
+            self.logger.error(f"WORKER{self.id_worker} - {id_match} doesn't have the minimum requirements")
             self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
+            
             return {}
+
+        self.logger.info(f"WORKER{self.id_worker} - {id_match} has the minimum requirements")
 
         try:
             outcome = self.driverManager.find_elem(soup, "div", "detailScore__wrapper", "outcome", 0)
@@ -48,7 +56,7 @@ class Scrapper:
                             data["date"].split(".")[0]
 
             if "Descenso" in self.driverManager.find_elem(soup, "span", "tournamentHeader__country", "round", 0).get_text():
-                print("Descenso")
+                self.logger.error(f"WORKER{self.id_worker} - {id_match} will be removed (Descenso)")
                 self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
                 return {}
 
@@ -67,40 +75,50 @@ class Scrapper:
                 soup, "div", "participant__participantName participant__overflow", "teamA", 1)
                                                         .find("a").get_text().replace("'",""))
 
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} basic variables scrapped")
+            
             data["odds_h"], data["odds_a"], data["odds_hx"], data["odds_ax"] = self.get_cuotas()
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} bet odds scrapped")
+            
 
             data["stats_total"] = self.get_stats()
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Stats scrapped")
+
             data["stats_first_time"] = self.get_stats_time(
                 "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(
                     id_match))
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Stats first time scrapped")
+
             data["stats_second_time"]= self.get_stats_time(
                 "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/2".format(
                     id_match))
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Stats second time scrapped")
 
             data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
-
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Comments scrapped")
+            
             local=data['teamH']
             place_weather = self.mysql_con.select_table("stadiums", where=f"TEAM='{local}'")[["PLACE_WEATHER"]]
             data["weather_info"], data["temperature"], data["wind"], data["rain"], data["humidity"], data["cloudy"] = self.scrapper_weather\
                     .get_weather_data_historical(list(set(place_weather["PLACE_WEATHER"].tolist()))[0], data["date"], data["time"])
 
-            print(local, data["date"], data["teamA"])
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Weather scrapped")
 
             return data
         except Exception as ex:
             self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
-
-            print("Error unknown scrapping {0}".format(url), ex)
+            self.logger.error(f"WORKER{self.id_worker} - {id_match} Error unknown scrapping: {ex}")
             return {}
 
     def get_stats_matches(self, id_matches: list):
         for id_match in id_matches:
             data = self.get_stats_match(id_match)
-            #if not data: print("Nada")
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Match totally scrapped")
             self.insert_data_match(data)
-            #print(data["id_match"], data["teamH"], data["teamA"], data["data"], len(self.matches_to_insert))
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Match inserted")
 
         self.insert_records()
+        self.logger.info(f"WORKER{self.id_worker} - Finished worker")
         self.driverManager.quit()
         self.scrapper_weather.driverManager.quit()
 
@@ -131,7 +149,7 @@ class Scrapper:
             odd_hx = round(1.0 / (1 - (1.0 / float(odd_a) - 0.05)), 2)
         except:
             odd_hx= -1
-
+        
         return odd_h, odd_a, odd_hx, odd_ax
 
     def get_stats_time(self, url: str) -> dict:
@@ -216,6 +234,7 @@ class Scrapper:
             a2 = self.insert_stats(id_match + "A2", data["stats_second_time"], "Away")
 
             if not ht or not h1 or not h2 or not at or not a1 or not a2: 
+                self.logger.error(f"WORKER{self.id_worker} - {id_match} Stats bad scrapped. INVALID match")
                 self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
                 return None
                 
@@ -297,6 +316,7 @@ class Scrapper:
         for url in urls_league:
             driverManager.get(url)
             driverManager.click_button_by_id("onetrust-accept-btn-handler", url)
+            self.logger.info(f"WORKER{self.id_worker} - scrapping {url}")
 
             while True:
                 #For doing the button visible for selenium, scroll down
@@ -315,9 +335,10 @@ class Scrapper:
                 id_match = match.get_attribute('id').replace("g_1_", "")
                 count += 1
                 if id_match not in url_finished_present:
-                    print(count, id_match)
+                    self.logger.info(f"WORKER{self.id_worker} - {id_match} added")
                     urls_to_insert.append((count, id_match))
 
+        self.logger.info(f"WORKER{self.id_worker} - All records inserted in database")
         self.mysql_con.execute_many(queries.stmt_finished_matches, urls_to_insert)
 
         driverManager.quit()

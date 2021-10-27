@@ -4,7 +4,7 @@ from DataCollection.properties import queries
 
 
 mysql_con = mysql_management.MySQLManager()
-scrapper = scrapper_matches.Scrapper()
+scrapper = scrapper_matches.Scrapper(1)
 
 
 def get_records_today(url_football_matches="https://www.flashscore.es/?rd=mismarcadores.com"):

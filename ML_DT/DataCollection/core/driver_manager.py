@@ -24,7 +24,7 @@ class DriverManager:
         options.add_argument("--disable-extensions")
         options.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome(chrome_options=options)
-
+        print(__name__)
         if adult_accept:
             self.version_18()
 

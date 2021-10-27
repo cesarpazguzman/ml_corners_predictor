@@ -1,12 +1,13 @@
 import time
 
 from DataCollection.core.driver_manager import DriverManager
-
+import logging
 
 class ScrapperWeather:
 
     def __init__(self):
         self.driverManager = DriverManager(adult_accept=False)
+        self.logger = logging.getLogger("logs").getChild(__name__)
 
     def get_weather_data_historical(self, place_weather, date_match, time_match):
         url = f"https://www.worldweatheronline.com/{place_weather.replace('weather/', 'weather-history/')}"
@@ -47,5 +48,5 @@ class ScrapperWeather:
         cloudy = self.driverManager.driver\
                 .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+7}]')[0].text\
                     .replace('%','')
-
+        
         return weather_info, temperature, wind, rain, humidity, cloudy
