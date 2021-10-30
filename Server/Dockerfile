@@ -6,7 +6,7 @@ WORKDIR /home/root
 
 #Initial configuration
 RUN apt-get update -y && apt install bash-completion && \
-      apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget nano sudo curl
+      apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget nano sudo curl unzip libjpeg-dev zlib1g-dev
 
 RUN printf '%s\n' "source /etc/profile.d/bash_completion.sh" >> ~/.bashrc
 
@@ -43,6 +43,17 @@ RUN apt install -y maven
 RUN pip install jupyter
 EXPOSE 8888
 
+#Install google-chrome & chromedriver
+RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add 
+RUN bash -c "echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google-chrome.list" 
+RUN apt -y update && apt -y install google-chrome-stable
+RUN wget wget https://chromedriver.storage.googleapis.com/95.0.4638.54/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && \
+	mv chromedriver /usr/bin/chromedriver && chown root:root /usr/bin/chromedriver && chmod +x /usr/bin/chromedriver
+
+ENV PYTHONIOENCODING=utf-8
+
+COPY requirements.txt /requirements.txt
+RUN pip install -r requirements.txt
 
 COPY entrypoint.sh /entrypoint.sh
 

@@ -9,7 +9,18 @@ mysql -u root -p"secret" -e "CREATE DATABASE IF NOT EXISTS football_data"
 mysql -u root -p"secret" -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secret'"
 mysql -u root -p"secret" -e "FLUSH PRIVILEGES"
 
-bash /home/root/ml_corners_predictor/Server/Scripts/update_liquibase_changes.sh
+bash Scripts/update_liquibase_changes.sh
+
+
+if [[ $(mysql -u root -p"secret" -e "SELECT 1 FROM football_data.finished_matches LIMIT 1") ]]
+then
+    echo "Table has records ..."
+else
+    echo "Table is empty. Restoring database..."
+    bash Scripts/restore_database.sh
+fi
+
+
 
 exec tail -f /dev/null
 
