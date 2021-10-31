@@ -4,6 +4,7 @@ service mysql stop
 usermod -d /var/lib/mysql/ mysql
 service mysql start 
 
+export PATH=$PATH:/home/root/opt/python3.7.11/bin
 
 mysql -u root -p"secret" -e "CREATE DATABASE IF NOT EXISTS football_data"
 mysql -u root -p"secret" -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secret'"

@@ -34,7 +34,7 @@ def get_stats_matches():
     logger.info("STATS MATCHES")
     id_matches = mysql_con.select_table("finished_matches", 
         where="URL NOT IN (SELECT ID FROM football_data.matches) AND INVALID IS FALSE")["URL"].tolist()
-    num_workers = properties.num_workers
+    num_workers = (properties.num_workers if len(id_matches)>100 else 2) if len(id_matches)>10 else 1
     splitted_matches = list(utils.split(id_matches, num_workers))
 
     logger.info("N workers: " + str(num_workers))
