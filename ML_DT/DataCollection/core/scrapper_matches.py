@@ -105,7 +105,7 @@ class Scrapper:
             local=data['teamH']
             place_weather = self.mysql_con.select_table("stadiums", where=f"TEAM='{local}'")[["PLACE_WEATHER"]]
             data["weather_info"], data["temperature"], data["wind"], data["rain"], data["humidity"], data["cloudy"] = self.scrapper_weather\
-                    .get_weather_data_historical(list(set(place_weather["PLACE_WEATHER"].tolist()))[0], data["date"], data["time"])
+                    .get_weather_data_historical(id_match, list(set(place_weather["PLACE_WEATHER"].tolist()))[0], data["date"], data["time"])
 
             self.logger.info(f"WORKER{self.id_worker} - {id_match} Weather scrapped")
 

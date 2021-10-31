@@ -9,9 +9,11 @@ class ScrapperWeather:
         self.driverManager = DriverManager(adult_accept=False)
         self.logger = logging.getLogger("logs").getChild(__name__)
 
-    def get_weather_data_historical(self, place_weather, date_match, time_match):
+    def get_weather_data_historical(self, id_match, place_weather, date_match, time_match):
         url = f"https://www.worldweatheronline.com/{place_weather.replace('weather/', 'weather-history/')}" if \
             "history" not in place_weather else f"https://www.worldweatheronline.com/{place_weather}"
+
+        self.logger.info(id_match+f" - Weather: {url} - {date_match} - {time_match}")
 
         self.driverManager.get(url, 1)
 
@@ -27,6 +29,8 @@ class ScrapperWeather:
         init_count=14
         id_row = init_count+12*hour
 
+        self.logger.info(id_match+f" - Weather: {month}-{day}-{year}")
+        
         weather_info = self.driverManager.driver\
                 .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row}]/img')[0].get_attribute("title")
         
