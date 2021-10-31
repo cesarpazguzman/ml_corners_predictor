@@ -94,7 +94,7 @@ class Scrapper:
                     id_match))
             self.logger.info(f"WORKER{self.id_worker} - {id_match} Stats second time scrapped")
 
-            if not data["stats_total"] or not data["stats_first_time"] or not data["stats_second_time"]:
+            if data["stats_total"]=={} or data["stats_first_time"]=={} or data["stats_second_time"]=={}:
                 self.logger.error(f"WORKER{self.id_worker} - {id_match} will be removed (Invalid stats)")
                 self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
                 return {}
@@ -118,9 +118,10 @@ class Scrapper:
     def get_stats_matches(self, id_matches: list):
         for id_match in id_matches:
             data = self.get_stats_match(id_match)
-            self.logger.info(f"WORKER{self.id_worker} - {id_match} Match totally scrapped")
-            self.insert_data_match(data)
-            self.logger.info(f"WORKER{self.id_worker} - {id_match} Match inserted")
+            if data != {}:
+                self.logger.info(f"WORKER{self.id_worker} - {id_match} Match totally scrapped")
+                self.insert_data_match(data)
+                self.logger.info(f"WORKER{self.id_worker} - {id_match} Match inserted")
 
         self.insert_records()
         self.logger.info(f"WORKER{self.id_worker} - Finished worker")
@@ -167,6 +168,7 @@ class Scrapper:
         i = 0
         stats = {}
         while True:
+            
             try:
                 val1: str = self.driverManager.find_elem(stats_match[i], "div", "statHomeValue", "val1", 0)\
                     .get_text()
@@ -175,11 +177,11 @@ class Scrapper:
                 val2: str = self.driverManager.find_elem(stats_match[i], "div", "statAwayValue", val1, 0)\
                     .get_text()
 
-                if int(val1) < 0 or int(val2) < 0: return None
+                if (val1.isnumeric() and int(val1) < 0) or (val2.isnumeric() and int(val2) < 0): 
+                    return {}
 
                 stats[unidecode.unidecode(title)] = {"Home": val1, "Away": val2}
                 i += 1
-
             except:
                 break
 

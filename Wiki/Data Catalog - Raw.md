@@ -36,6 +36,11 @@ There're usually matches every weekend (Friday - Saturday- Sunday - Monday). Occ
 | CORNERS_MIN_AWAY | VARCHAR(255) | N | MINUTE WHEN CORNERS HAPPENED FOR AWAY TEAM - 25;45;78;90 |
 | GOALS_MIN_HOME | VARCHAR(255) | N | MINUTE WHEN GOALS HAPPENED FOR HOME TEAM - 5;66 |
 | GOALS_MIN_AWAY | VARCHAR(255) | N | MINUTE WHEN GOALS HAPPENED FOR AWAY TEAM - 86 |
+| TEMPERATURE | FLOAT | N | 15ºC |
+| HUMIDITY | FLOAT | N | 50% |
+| RAIN | FLOAT | N | 12mm |
+| CLOUDY | FLOAT | N | 60% |
+| WIND | FLOAT | N | 30km/h |
 
 ##
 ## 2- STATS MATCHES
@@ -72,6 +77,7 @@ There're usually matches every weekend (Friday - Saturday- Sunday - Monday). Occ
 |--|--|--|--|
 | ID | VARCHAR (10) | N | ID |
 | URL | VARCHAR (10) | N | URL: Example https://www.flashscore.es/partido/YN3p7dNn/#resumen-del-partido/estadisticas-del-partido/0 |
+| INVALID| BOOLEAN | N | If there was a mistake while scrapping the match
 
 ##
 ## 3- ACTIVE MATCHES URL
