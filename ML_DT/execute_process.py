@@ -12,8 +12,8 @@ logger = logging.getLogger("logs").getChild(__name__)
 def execute_process(process):
     if process == 1:
         logger.info("Executing process: Historical")
-        historical.get_all_matches_url()
-        #historical.get_stats_matches()
+        #historical.get_all_matches_url()
+        historical.get_stats_matches()
         #sm = scrapper_matches.Scrapper()
         #data = sm.get_stats_match("CEnQwkhs")
         #sm.insert_data_match(data, True)

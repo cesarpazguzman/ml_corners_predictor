@@ -94,6 +94,11 @@ class Scrapper:
                     id_match))
             self.logger.info(f"WORKER{self.id_worker} - {id_match} Stats second time scrapped")
 
+            if not data["stats_total"] or not data["stats_first_time"] or not data["stats_second_time"]:
+                self.logger.error(f"WORKER{self.id_worker} - {id_match} will be removed (Invalid stats)")
+                self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
+                return {}
+                
             data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
             self.logger.info(f"WORKER{self.id_worker} - {id_match} Comments scrapped")
             
@@ -107,7 +112,7 @@ class Scrapper:
             return data
         except Exception as ex:
             self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
-            self.logger.error(f"WORKER{self.id_worker} - {id_match} Error unknown scrapping: {ex}")
+            self.logger.error(f"WORKER{self.id_worker} - {id_match} - {data['teamH']} - {data['date']} - Error unknown scrapping: {ex}")
             return {}
 
     def get_stats_matches(self, id_matches: list):
@@ -169,6 +174,8 @@ class Scrapper:
                     .get_text()
                 val2: str = self.driverManager.find_elem(stats_match[i], "div", "statAwayValue", val1, 0)\
                     .get_text()
+
+                if int(val1) < 0 or int(val2) < 0: return None
 
                 stats[unidecode.unidecode(title)] = {"Home": val1, "Away": val2}
                 i += 1
@@ -300,9 +307,10 @@ class Scrapper:
             attacks = 0 if "Ataques" not in stats else stats["Ataques"][h_a]
             dangerous_attacks = 0 if "Ataques peligrosos" not in stats else stats["Ataques peligrosos"][h_a]
 
-            return (id_match, ball_possession, goal_attempts, corners, shots_on_goal, shots_off_goal, blocked_shots,
-                    free_kicks, offsides, throw_in, goalkeeper_saves, fouls, yellow_cards, red_cards, completed_passes,
+            return (id_match, ball_possession, goal_attempts, shots_on_goal, shots_off_goal, blocked_shots,
+                    free_kicks, corners, offsides, throw_in, goalkeeper_saves, fouls, yellow_cards, red_cards, completed_passes,
                     tackles, attacks, dangerous_attacks)
+
         except:
             return None
 

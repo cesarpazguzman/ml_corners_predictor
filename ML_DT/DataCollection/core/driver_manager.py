@@ -29,10 +29,13 @@ class DriverManager:
             self.version_18()
 
     def version_18(self):
-        self.get("https://mismarcadores.com",1.3)
-        self.driver.find_elements_by_class_name("button___1wCBhNg")[0].click()
-        time.sleep(1.5)
-        self.driver.find_elements_by_class_name("confirmationButton___38WagOL")[0].click()
+        try:
+            self.get("https://mismarcadores.com",1.3)
+            self.driver.find_elements_by_class_name("button___1wCBhNg")[0].click()
+            time.sleep(1.5)
+            self.driver.find_elements_by_class_name("confirmationButton___38WagOL")[0].click()
+        except:
+            pass
 
     def click_button_by_id(self, button_id: str, url="") -> bool:
         try:

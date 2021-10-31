@@ -10,7 +10,8 @@ class ScrapperWeather:
         self.logger = logging.getLogger("logs").getChild(__name__)
 
     def get_weather_data_historical(self, place_weather, date_match, time_match):
-        url = f"https://www.worldweatheronline.com/{place_weather.replace('weather/', 'weather-history/')}"
+        url = f"https://www.worldweatheronline.com/{place_weather.replace('weather/', 'weather-history/')}" if \
+            "history" not in place_weather else f"https://www.worldweatheronline.com/{place_weather}"
 
         self.driverManager.get(url, 1)
 
