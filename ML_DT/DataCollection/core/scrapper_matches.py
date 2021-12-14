@@ -102,10 +102,12 @@ class Scrapper:
             data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
             self.logger.info(f"WORKER{self.id_worker} - {id_match} Comments scrapped")
             
-            local=data['teamH']
-            place_weather = self.mysql_con.select_table("stadiums", where=f"TEAM='{local}'")[["PLACE_WEATHER"]]
-            data["weather_info"], data["temperature"], data["wind"], data["rain"], data["humidity"], data["cloudy"] = self.scrapper_weather\
-                    .get_weather_data_historical(id_match, list(set(place_weather["PLACE_WEATHER"].tolist()))[0], data["date"], data["time"])
+            #local=data['teamH']
+            #place_weather = self.mysql_con.select_table("stadiums", where=f"TEAM='{local}'")[["PLACE_WEATHER"]]
+            #data["weather_info"], data["temperature"], data["wind"], data["rain"], data["humidity"], data["cloudy"] = self.scrapper_weather\
+            #        .get_weather_data_historical(id_match, list(set(place_weather["PLACE_WEATHER"].tolist()))[0], data["date"], data["time"])
+
+            data["weather_info"], data["temperature"], data["wind"], data["rain"], data["humidity"], data["cloudy"] = "",0,0,0,0,0
 
             self.logger.info(f"WORKER{self.id_worker} - {id_match} Weather scrapped")
 
@@ -196,17 +198,20 @@ class Scrapper:
         comments = self.driverManager.find_elem(self.driverManager.soup, "div", "soccer__row", "comments")
 
         for comment in comments:
-            comment_text = self.driverManager.find_elem(comment, "div", "soccer__comment", "comment_text", 0) \
-                .get_text()
-            
-            type_comment = "corners" if comment.find_all("svg",{"class":"corner-ico"}) else False
+            type_comment = "corners" if "corner-ico" in str(comment) else False
+
             if type_comment:
                 comment_text = self.driverManager.find_elem(comment, "div", "soccer__comment", "comment_text", 0)\
                     .get_text()
                 comment_time = self.driverManager.find_elem(comment, "div", "soccer__time", "comment_text", 0)\
                     .get_text().replace("'", "")
-                comment_team = team_h.split(" ")[0] in comment_text and team_h or \
-                               team_a.split(" ")[0] in comment_text and team_a or False
+                
+                if team_h.split(" ")[0] != team_a.split(" ")[0]:
+                    comment_team = team_h.split(" ")[0] in unidecode.unidecode(comment_text) and team_h or \
+                                team_a.split(" ")[0] in unidecode.unidecode(comment_text) and team_a or False
+                else:
+                    comment_team = team_h.split(" ")[1] in unidecode.unidecode(comment_text) and team_h or \
+                                team_a.split(" ")[1] in unidecode.unidecode(comment_text) and team_a or False
 
                 if comment_team: list_comments[comment_team][type_comment].append(comment_time)
 
@@ -361,9 +366,9 @@ class Scrapper:
             self.driverManager.get(url_match, 1)
             soup = self.driverManager.soup
 
-            time_match: str = self.driverManager.find_elem(soup,"div", "startTime___2oy0czV", "time", 0)\
+            time_match: str = self.driverManager.find_elem(soup,"div", "duelParticipant__startTime", "time", 0)\
                 .get_text().split(" ")[1]
-            league: str = self.driverManager.find_elem(soup, "span", "country___24Qe-aj", "round", 0)\
+            league: str = self.driverManager.find_elem(soup, "span", "tournamentHeader__country", "round", 0)\
                 .get_text()
 
             #Filtering female leagues
@@ -382,3 +387,66 @@ class Scrapper:
         self.driverManager.quit()
 
         return records_to_insert
+
+
+    def get_stats_live_match(self, id_match: str) -> dict:
+        url = "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/0".format(id_match)
+        self.driverManager.get(url, 1)
+        soup = self.driverManager.soup
+        print(url)
+
+        data = {"id_match": id_match}
+
+        minute = self.driverManager.find_elem(soup, "div", "detailScore__status", "time", 0)\
+                .find_all("span")[1].get_text()
+
+        if minute =="Descanso" or int(minute.split(" - ")[1].split(":")[0]) < 65:
+            print("No")
+            return -1
+
+        self.logger.info(f"WORKER{self.id_worker} - Scrapping {url}")
+        if "Remates" not in self.driverManager.c or "Posesión de balón" not in self.driverManager.c \
+                or "Córneres" not in self.driverManager.c:
+            
+            self.logger.error(f"WORKER{self.id_worker} - {id_match} doesn't have the minimum requirements")
+            self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
+            
+            return {}
+
+        self.logger.info(f"WORKER{self.id_worker} - {id_match} has the minimum requirements")
+
+        try:
+            outcome = self.driverManager.find_elem(soup, "div", "detailScore__wrapper detailScore__live", "outcome", 0)
+            data["goals_h"] = outcome.find_all("span")[0].get_text()
+            data["goals_a"] = outcome.find_all("span")[2].get_text()
+
+            data["teamH"] = unidecode.unidecode(self.driverManager.find_elem(
+                soup, "div", "participant__participantName participant__overflow", "teamH", 0)
+                                                        .find("a").get_text().replace("'",""))
+            data["teamA"] = unidecode.unidecode(self.driverManager.find_elem(
+                soup, "div", "participant__participantName participant__overflow", "teamA", 1)
+                                                        .find("a").get_text().replace("'",""))
+
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} basic variables scrapped")
+            
+            data["odds_h"], data["odds_a"], data["odds_hx"], data["odds_ax"] = self.get_cuotas()
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} bet odds scrapped")
+            
+
+            data["stats_first_time"] = self.get_stats_time(
+                "https://www.flashscore.es/partido/{0}/#resumen-del-partido/estadisticas-del-partido/1".format(
+                    id_match))
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Stats first time scrapped")
+
+            if data["stats_first_time"]=={}:
+                self.logger.error(f"WORKER{self.id_worker} - {id_match} will be removed (Invalid stats)")
+                self.mysql_con.execute(f"UPDATE football_data.finished_matches SET INVALID=TRUE WHERE URL='{id_match}'")
+                return {}
+                
+            data["comments"] = self.get_comments(id_match, data["teamH"], data["teamA"])
+            self.logger.info(f"WORKER{self.id_worker} - {id_match} Comments scrapped")
+
+            return data
+        except Exception as ex:
+            self.logger.error(f"WORKER{self.id_worker} - {id_match} - {data['teamH']} - {data['date']} - Error unknown scrapping: {ex}")
+            return {}

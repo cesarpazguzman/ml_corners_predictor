@@ -31,27 +31,27 @@ class ScrapperWeather:
 
         self.logger.info(id_match+f" - Weather: {month}-{day}-{year}")
         
-        weather_info = self.driverManager.driver\
-                .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row}]/img')[0].get_attribute("title")
+        #weather_info = self.driverManager.driver\
+        #        .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row}]/img')[0].get_attribute("title")
+        #temperature = self.driverManager.driver\
+        #        .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+1}]')[0].text\
+        #            .replace(' °c','')
+        #wind = self.driverManager.driver\
+        #        .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+3}]')[0].text\
+        #            .split(' ')[0]
         
-        temperature = self.driverManager.driver\
-                .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+1}]')[0].text\
-                    .replace(' °c','')
+        #rain = self.driverManager.driver\
+        #        .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+5}]')[0].text\
+        #            .split(' ')[0]
 
-        wind = self.driverManager.driver\
-                .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+3}]')[0].text\
-                    .split(' ')[0]
+        #humidity = self.driverManager.driver\
+        #        .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+6}]')[0].text\
+        #            .replace('%','')
         
-        rain = self.driverManager.driver\
-                .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+5}]')[0].text\
-                    .split(' ')[0]
+        #cloudy = self.driverManager.driver\
+        #        .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+7}]')[0].text\
+        #            .replace('%','')
         
-        humidity = self.driverManager.driver\
-                .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+6}]')[0].text\
-                    .replace('%','')
-        
-        cloudy = self.driverManager.driver\
-                .find_elements_by_xpath(f'//*[@id="aspnetForm"]/div[4]/main/div[4]/div[1]/div[3]/div/div[1]/div/div[2]/div/div[{id_row+7}]')[0].text\
-                    .replace('%','')
-        
+        weather_info = ""
+        temperature = wind = rain = humidity = cloudy = 0
         return weather_info, temperature, wind, rain, humidity, cloudy
