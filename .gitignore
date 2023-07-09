@@ -1,0 +1,16 @@
+DataEnginnering/DataCollection/venv/
+DataEnginnering/DataCollection/core/__pycache__/
+DataEnginnering/DataCollection/betcore/__pycache__
+DataEnginnering/DataCollection/.idea/
+DataEnginnering/DataCollection/__pycache__/
+DataEnginnering/DatabaseCreation/.idea/
+*.iml
+DatabaseCreation/.idea/
+ML_DT/.idea/
+ML_DT/DataCollection/core/__pycache__/
+ML_DT/DataCollection/test/__pycache__/
+ML_DT/DataCollection/properties/__pycache__/
+ML_DT/DataCollection/test/test_historical/__pycache__/
+*.pyc
+ML_DT/venv/
+.idea/inspectionProfiles/profiles_settings.xml

@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  apuestas:
+    image: apuestas:latest
+    container_name: apuestas
+    volumes:
+      - ./../../ml_corners_predictor:/home/root/ml_corners_predictor
+    ports:
+      - "8888:8888"
+      - "8282:8282"

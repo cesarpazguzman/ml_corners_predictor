@@ -1,0 +1,12 @@
+{
+    "python.testing.pytestArgs": [
+        "ML_DT"
+    ],
+    "python.testing.unittestEnabled": true,
+    "python.testing.pytestEnabled": true,
+    "python.analysis.extraPaths": [
+        "./ML_DT",
+        "./ML_DT",
+        "./ML_DT"
+    ]
+}
